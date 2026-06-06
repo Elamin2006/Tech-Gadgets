@@ -1,0 +1,15 @@
+{
+  "name": "fullstack-tech-gadgets",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev:client": "npm --workspace client run dev",
+    "build:client": "npm --workspace client run build",
+    "lint:client": "npm --workspace client run lint",
+    "preview:client": "npm --workspace client run preview",
+    "test:server": "npm --workspace server test"
+  }
+}
