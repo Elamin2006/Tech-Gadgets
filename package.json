@@ -10,6 +10,8 @@
     "build:client": "npm --workspace client run build",
     "lint:client": "npm --workspace client run lint",
     "preview:client": "npm --workspace client run preview",
-    "test:server": "npm --workspace server test"
+    "test:server": "npm --workspace server test",
+        "start": "nodemon index.js"
+
   }
 }
