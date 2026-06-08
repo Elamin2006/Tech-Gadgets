@@ -1,18 +1,17 @@
 import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
 
 const userSchema = new mongoose.Schema({
     firstName: {
         type: String,
         required: true,
         trim: true,
-        lowercase: true,
         minlength: [3, "First name must be at least 3 characters long"],
     },
     lastName: {
         type: String,
         required: true,
         trim: true,
-        lowercase: true,
         minlength: [3, "Last name must be at least 3 characters long"],
     },
     email: {
@@ -21,7 +20,7 @@ const userSchema = new mongoose.Schema({
         trim: true,
         lowercase: true,
         unique: true,
-        
+
     },
     password: {
         type: String,
@@ -34,11 +33,21 @@ const userSchema = new mongoose.Schema({
         enum: ["user", "admin"],
         default: "user",
     },
-   
+
     createdAt: {
         type: Date,
         default: Date.now,
     },
 });
 
-export const User = mongoose.model("User", userSchema);
+userSchema.pre("save", async function (next) {
+    const user = this;
+    if (!user.isModified("password")) {
+        return next();
+    }
+    user.password = await bcrypt.hash(user.password, 10);
+    next();
+});
+const User = mongoose.model('User' , userSchema)
+
+export default User;
