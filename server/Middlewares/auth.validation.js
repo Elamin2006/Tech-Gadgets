@@ -1,6 +1,6 @@
 import { registerValidation, loginValidation } from "../Services/userValidation.js";
 function validateRegister(req, res, next) {
-    const { error } = registerValidation(req.body);
+    const { error } = registerValidation.validate(req.body);
     if (error) {
         return res.status(400).json({ error: error.details[0].message });
     }
@@ -8,7 +8,7 @@ function validateRegister(req, res, next) {
 }
 
 function validateLogin(req, res, next) {
-    const { error } = loginValidation(req.body);
+    const { error } = loginValidation.validate(req.body);
     if (error) {
         return res.status(400).json({ error: error.details[0].message });
     }
