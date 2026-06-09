@@ -2,55 +2,63 @@ import dotenv from "dotenv";
 import User from "../Model/User.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import asyncHandler from "express-async-handler";
+import ApiError from "../Utils/ApiError.js";
 
 dotenv.config();
 
-export const register = async (req, res) => {
-    try {
-        const user = req.body;
+export const register = asyncHandler(async (req, res) => {
 
-        const userExists = await User.findOne({ email: user.email });
-        if (userExists) {
-            return res.status(400).json({ message: "Email already exists" });
-        }
+    const user = req.body;
 
-        user.createdAt = new Date().toISOString();
-        const newUser = new User(user);
-        await newUser.save();
-        const userResponse = newUser.toObject();
-        delete userResponse.password;
-        res.status(201).json({ message: "User registered successfully" });
-
-    } catch (error) {
-        res.status(500).json({ message: "Internal server error" });
+    const userExists = await User.findOne({ email: user.email });
+    if (userExists) {
+        throw new ApiError("User with this email already exists", 409);
     }
-};
 
-export const login = async (req, res) => {
-    try {
-        const { email, password } = req.body;
+    user.createdAt = new Date().toISOString();
+    const newUser = new User(user);
+    await newUser.save();
+    const userResponse = newUser.toObject();
+    delete userResponse.password;
+    
+    res.status(201).json({
+        success: true,
+        message: "User registered successfully",
+        data: userResponse
+    });
 
-        if (!email || !password) {
-            return res.status(400).json({ message: "Email and password are required" });
-        }
 
-        let user = await User.findOne({ email });
-        if (!user) {
-            return res.status(400).json({ message: "Invalid email or password" });
-        }
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-        if (!isPasswordValid) {
-            return res.status(400).json({ message: "Invalid email or password" });
-        }
+});
 
-        const token = jwt.sign({ userId: user._id, role: user.role, email: user.email },
-            process.env.ACCESS_TOKEN_SECRET,
-            { expiresIn: "1d" });
+export const login = asyncHandler(async (req, res) => {
 
-        res.status(200).json({ message: "Login successful", token });
+    const { email, password } = req.body;
 
-    } catch (error) {
-        res.status(500).json({ message: "Internal server error" });
+    if (!email || !password) {
+        throw new ApiError("Email and password are required", 400);
     }
-};
+
+    let user = await User.findOne({ email });
+    if (!user) {
+        throw new ApiError("Invalid email or password", 400);
+    }
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+        throw new ApiError("Invalid email or password", 400);
+    }
+
+    const token = jwt.sign({ userId: user._id, role: user.role, email: user.email },
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: "1d" });
+
+    res.status(200).json({
+        success: true,
+        message: "Login successful",
+        token,
+        data: user.toObject()
+    });
+
+
+});
 
