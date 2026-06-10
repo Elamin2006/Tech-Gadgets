@@ -5,6 +5,8 @@ import morgan from "morgan";
 import { logger } from "./Utils/logger.js";
 import userRouter from "./Routes/user.routes.js";
 import errorHandler from "./Middlewares/errorHandler.js";
+import ApiError from "./Utils/ApiError.js";
+import {fileURLToPath} from "url";
 dotenv.config();
 
 const app = express();
@@ -16,6 +18,9 @@ app.use(logger);
 
 app.use("/api/users", userRouter);
 
+app.use((req, res, next) => {
+  next(new ApiError(`Cannot ${req.method} ${req.originalUrl}`, 404))
+});
 app.use(errorHandler);
 
 async function startServer() {
