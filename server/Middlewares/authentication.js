@@ -1,14 +1,17 @@
+import asyncHandler from "express-async-handler";
+import apiError from "../Utils/ApiError.js";
+import User from "../Model/User.model.js";
 import {promisify} from "util";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
-import User from "../Model/User.model.js";
+
 dotenv.config();
 
-const authentication = async (req, res, next) => {
+const authentication = asyncHandler(async (req, res, next) => {
     const authHeader = req.headers.authorization || req.headers.Authorization
 
   if (!authHeader?.startsWith('Bearer ')) {
-    return res.status(401).json({ message: 'Unauthorized' })
+    throw new apiError('Unauthorized', 401);
   }
 
   const token = authHeader.split(' ')[1]
@@ -18,18 +21,14 @@ const authentication = async (req, res, next) => {
 
     const currentUser = await User.findById(decoded.userId);
     if (!currentUser) {
-      return res.status(401).json({
-        message: 'The user belonging to this token no longer exists.',
-      });
+      throw new apiError('The user belonging to this token no longer exists.', 401);
     }
 
     req.user = currentUser;
     next();
   } catch (error) {
-    return res.status(401).json({
-      message: 'Invalid token or token has expired. Please login again.',
-    });
+    throw new apiError('Invalid token or token has expired. Please login again.', 401);
   }
-}
+});
 
 export default authentication;
