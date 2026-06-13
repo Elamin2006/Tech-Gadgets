@@ -12,16 +12,17 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 5000;
+const apiVersion = "/api/v1";
 
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(logger);
 
-app.use("/api/users", userRouter);
-app.use('/category' , categoryRouter )
+app.use(`${apiVersion}/users`, userRouter);
+app.use(`${apiVersion}/categories`, categoryRouter);
 
 app.use((req, res, next) => {
-  next(new ApiError(`Cannot ${req.method} ${req.originalUrl}`, 404))
+  next(new ApiError(`Cannot ${req.method} ${req.originalUrl}`, 404));
 });
 app.use(errorHandler);
 
