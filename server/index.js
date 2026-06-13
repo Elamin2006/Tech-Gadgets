@@ -4,6 +4,7 @@ import { DBConnection } from "./Database/mongoose.js";
 import morgan from "morgan";
 import { logger } from "./Utils/logger.js";
 import userRouter from "./Routes/user.routes.js";
+import categoryRouter from "./Routes/category.routes.js";
 import errorHandler from "./Middlewares/errorHandler.js";
 import ApiError from "./Utils/ApiError.js";
 import {fileURLToPath} from "url";

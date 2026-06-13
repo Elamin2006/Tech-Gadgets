@@ -6,11 +6,11 @@ import {
     getCategoryById,
 } from "../Controllers/category.controller.js";
 
-import authentication from "../middleware/authentication.js"; 
-import { allowedTo } from "../middleware/authorization.js";
+import authentication from "../Middlewares/authentication.js";
+import { allowedTo } from "../Middlewares/authorization.js";
 
-import validatorMiddleware from "../middleware/validatorMiddleware.js";
-import { createCategorySchema } from "../middleware/validations/category.validation.js";
+import validatorMiddleware from "../Middlewares/validation.middleware.js";
+import { createCategorySchema } from "../validations/category.validation.js";
 
 const categoryRouter = express.Router();
 
