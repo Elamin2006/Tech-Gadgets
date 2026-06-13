@@ -5,6 +5,7 @@ import morgan from "morgan";
 import { logger } from "./Utils/logger.js";
 import userRouter from "./Routes/user.routes.js";
 import categoryRouter from "./Routes/category.routes.js";
+import productRouter from "./Routes/product.routes.js";
 import errorHandler from "./Middlewares/errorHandler.js";
 import ApiError from "./Utils/ApiError.js";
 import {fileURLToPath} from "url";
@@ -20,6 +21,8 @@ app.use(logger);
 
 app.use(`${apiVersion}/users`, userRouter);
 app.use(`${apiVersion}/categories`, categoryRouter);
+app.use(`${apiVersion}/products`, productRouter);
+
 
 app.use((req, res, next) => {
   next(new ApiError(`Cannot ${req.method} ${req.originalUrl}`, 404));
