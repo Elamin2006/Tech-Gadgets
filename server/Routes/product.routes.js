@@ -7,12 +7,12 @@ import {
     updateProduct
 } from '../Controllers/product.controller.js';
 
-import authentication from '../middleware/authentication.js';
-import { allowedTo } from '../middleware/authorization.js';
-import imageUpload from '../middleware/uploadImage.js';
+import authentication from '../Middlewares/authentication.js';
+import { allowedTo } from '../Middlewares/authorization.js';
+import imageUpload from '../Middlewares/uploadImage.js';
 
-import validatorMiddleware from '../middleware/validatorMiddleware.js';
-import { createProductSchema, updateProductSchema } from '../middleware/validations/product.validation.js';
+import validatorMiddleware from '../Middlewares/validation.middleware.js';
+import { createProductSchema, updateProductSchema } from '../validations/product.validation.js';
 
 const productRouter = express.Router();
 

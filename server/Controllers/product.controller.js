@@ -45,7 +45,7 @@ export const getAllProducts = asyncHandler(async (req, res, next) => {
 
 // Get Product By ID
 export const getProductById = asyncHandler(async (req, res, next) => {
-    const { id } = req.params;
+          const { id } = req.params;
     const product = await Product.findById(id).populate("categoryId", "name");
     
     if (!product) {
