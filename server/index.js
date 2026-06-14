@@ -22,6 +22,7 @@ app.use(logger);
 app.use(`${apiVersion}/users`, userRouter);
 app.use(`${apiVersion}/categories`, categoryRouter);
 app.use(`${apiVersion}/products`, productRouter);
+app.use(`${apiVersion}/cart`, cartRouter);
 
 
 app.use((req, res, next) => {
