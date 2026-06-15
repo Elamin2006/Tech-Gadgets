@@ -1,5 +1,5 @@
 import Product from "../Model/Product.model.js";
-import Cart from "../Model/cart.model.js";
+import Cart from "../Model/Cart.model.js";
 import ApiError from "../Utils/ApiError.js";
 import asyncHandler from "express-async-handler";
 
@@ -8,10 +8,10 @@ const calcTotalCartPrice = (cart) => {
     cart.cartItems.forEach((item) => {
         totalPrice += item.quantity * item.price;
     });
-    cart.totalPrice = totalPrice;
+    cart.totalCartPrice = totalPrice;
     cart.totalPriceAfterDiscount = undefined;
     return totalPrice;
-}
+};
 
 // Add Product To Cart
 export const addToCart = asyncHandler(async (req, res, next) => {
@@ -51,9 +51,10 @@ export const addToCart = asyncHandler(async (req, res, next) => {
 
 // Get Logged User Cart
 export const getLoggedUserCart = asyncHandler(async (req, res, next) => {
-    
+    const userId = req.user?._id;
+
     const cart = await Cart.findOne({ userId }).populate("cartItems.productId", "name price");
-        if (!cart) {
+    if (!cart) {
         throw new ApiError("No Cart Found For This User", 404);
     }
 
@@ -66,9 +67,9 @@ export const getLoggedUserCart = asyncHandler(async (req, res, next) => {
 
 // Remove Product From Cart
 export const removeFromCart = asyncHandler(async (req, res, next) => {
-    const {itemId} = req.params;
+    const { itemId } = req.params;
 
-    const cart = await Cart.findOneandUpdate(
+    const cart = await Cart.findOneAndUpdate(
         { userId: req.user?._id },
         { $pull: { cartItems: { _id: itemId } } },
         { new: true }
@@ -85,8 +86,11 @@ export const removeFromCart = asyncHandler(async (req, res, next) => {
 
 // Clear User Cart
 export const clearCart = asyncHandler(async (req, res, next) => {
-   
-    const cart = await Cart.findOneAndUpdate({ userId: req.user?._id });
+    const cart = await Cart.findOneAndUpdate(
+        { userId: req.user?._id },
+        { $set: { cartItems: [], totalCartPrice: 0, totalPriceAfterDiscount: undefined } },
+        { new: true }
+    );
 
     if (!cart) {
         throw new ApiError("No Cart found to Clear", 404);
