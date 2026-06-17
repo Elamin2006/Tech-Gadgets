@@ -1,3 +1,4 @@
+// imports & confi
 import express from "express";
 import dotenv from "dotenv";
 import { DBConnection } from "./Database/mongoose.js";
@@ -17,10 +18,12 @@ const app = express();
 const port = process.env.PORT || 5000;
 const apiVersion = "/api/v1";
 
+// global middlewares
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(logger);
 
+// Routes
 app.use(`${apiVersion}/users`, userRouter);
 app.use(`${apiVersion}/categories`, categoryRouter);
 app.use(`${apiVersion}/products`, productRouter);
@@ -30,8 +33,15 @@ app.use(`${apiVersion}/orders`, orderRouter);
 app.use((req, res, next) => {
   next(new ApiError(`Cannot ${req.method} ${req.originalUrl}`, 404));
 });
+
+// Handle undefined routes
+app.all('*', (req, res, next) => {
+    next(new ApiError(`Can't find this route: ${req.originalUrl}`, 404));
+});
+// Global Error Handler
 app.use(errorHandler);
 
+// Start Server
 async function startServer() {
   try {
     await DBConnection();
