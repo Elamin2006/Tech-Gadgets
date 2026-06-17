@@ -6,7 +6,7 @@ const categorySchema = new mongoose.Schema(
         name: {
             type: String,
             required: [true, "Category name is required"],
-            unique: true, // لمنع تكرار اسم الفئة (مثل: electronics, clothing)
+            unique: true, 
             trim: true,
             lowercase: true,
             maxlength: [32, "Category name is too long"]
