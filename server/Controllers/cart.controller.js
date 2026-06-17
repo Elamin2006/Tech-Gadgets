@@ -3,13 +3,21 @@ import Cart from "../Model/Cart.model.js";
 import ApiError from "../Utils/ApiError.js";
 import asyncHandler from "express-async-handler";
 
+
+const calculateProductPriceAfterDiscount = (product) => {
+    let finalPrice = product.price;
+    if (product.discount && product.discount > 0) {
+        finalPrice = product.price - (product.price * product.discount) / 100;
+    }
+    return finalPrice;
+};
+
 const calcTotalCartPrice = (cart) => {
     let totalPrice = 0;
     cart.cartItems.forEach((item) => {
         totalPrice += item.quantity * item.price;
     });
     cart.totalCartPrice = totalPrice;
-    cart.totalPriceAfterDiscount = undefined;
     return totalPrice;
 };
 
@@ -23,18 +31,23 @@ export const addToCart = asyncHandler(async (req, res, next) => {
         throw new ApiError(`No Product Found With This ID: ${productId}`, 404);
     }
 
+    const finalProductPrice = calculateProductPriceAfterDiscount(product);
+
     let cart = await Cart.findOne({ userId });
+    
     if (!cart) {
         cart = await Cart.create({
             userId,
-            cartItems: [{ productId, quantity, price: product.price }]
+            cartItems: [{ productId, quantity, price: finalProductPrice }]
         });
-    }else {
+    } else {
         const itemIndex = cart.cartItems.findIndex(item => item.productId.toString() === productId);
+        
         if (itemIndex > -1) {
             cart.cartItems[itemIndex].quantity += quantity;
+            cart.cartItems[itemIndex].price = finalProductPrice; 
         } else {
-            cart.cartItems.push({ productId, quantity, price: product.price });
+            cart.cartItems.push({ productId, quantity, price: finalProductPrice });
         }
     }
 
@@ -43,12 +56,10 @@ export const addToCart = asyncHandler(async (req, res, next) => {
 
     res.status(200).json({
         status: "Success",
-        message: "Product added to cart successfully",
         numOfCartItems: cart.cartItems.length,
         data: cart
     });
 });
-
 // Get Logged User Cart
 export const getLoggedUserCart = asyncHandler(async (req, res, next) => {
     const userId = req.user?._id;
