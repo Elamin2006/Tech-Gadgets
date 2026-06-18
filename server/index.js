@@ -11,6 +11,7 @@ import cartRouter from "./Routes/cart.routes.js";
 import orderRouter from "./Routes/order.routes.js";
 import errorHandler from "./Middlewares/errorHandler.js";
 import ApiError from "./Utils/ApiError.js";
+import path from "path";
 import {fileURLToPath} from "url";
 dotenv.config();
 
@@ -30,13 +31,10 @@ app.use(`${apiVersion}/products`, productRouter);
 app.use(`${apiVersion}/cart`, cartRouter);
 app.use(`${apiVersion}/orders`, orderRouter);
 
-app.use((req, res, next) => {
-  next(new ApiError(`Cannot ${req.method} ${req.originalUrl}`, 404));
-});
-
+app.use("/Uploads", express.static(path.join(path.resolve(), "Uploads")));
 // Handle undefined routes
 app.all('*', (req, res, next) => {
-    next(new ApiError(`Can't find this route: ${req.originalUrl}`, 404));
+    next(new ApiError(`Can't find this route:${req.method} ${req.originalUrl}`, 404));
 });
 // Global Error Handler
 app.use(errorHandler);
