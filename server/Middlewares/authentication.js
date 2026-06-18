@@ -1,5 +1,5 @@
 import asyncHandler from "express-async-handler";
-import apiError from "../Utils/ApiError.js";
+import apiError from "../Utils/apiError.js";
 import User from "../Model/User.model.js";
 import {promisify} from "util";
 import dotenv from "dotenv";

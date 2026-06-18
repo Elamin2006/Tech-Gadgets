@@ -1,6 +1,6 @@
 import multer from "multer";
 import path from 'path';
-import ApiError from "../Utils/ApiError.js";
+import ApiError from "../Utils/apiError.js";
 
 const imageStorage = multer.diskStorage({
     destination: function (req, file, cb) {

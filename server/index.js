@@ -10,7 +10,7 @@ import productRouter from "./Routes/product.routes.js";
 import cartRouter from "./Routes/cart.routes.js";
 import orderRouter from "./Routes/order.routes.js";
 import errorHandler from "./Middlewares/errorHandler.js";
-import ApiError from "./Utils/ApiError.js";
+import ApiError from "./Utils/apiError.js";
 import path from "path";
 import {fileURLToPath} from "url";
 import cors from "cors";

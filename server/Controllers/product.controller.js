@@ -1,6 +1,6 @@
 import Category from "../Model/Category.model.js";
 import Product from "../Model/Product.model.js"; 
-import ApiError from "../Utils/ApiError.js";
+import ApiError from "../Utils/apiError.js";
 import asyncHandler from "express-async-handler";
 import fs from 'fs';
 

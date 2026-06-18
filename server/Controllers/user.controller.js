@@ -1,6 +1,6 @@
 import User from "../Model/User.model.js";
 import asyncHandler from "express-async-handler";
-import ApiError from "../Utils/ApiError.js";
+import ApiError from "../Utils/apiError.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";

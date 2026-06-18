@@ -1,7 +1,7 @@
 import Order from "../Model/Order.model.js";
 import Cart from "../Model/Cart.model.js";
 import Product from "../Model/Product.model.js";
-import ApiError from "../Utils/ApiError.js";
+import ApiError from "../Utils/apiError.js";
 import asyncHandler from "express-async-handler";
 import { sendOrderEmail } from "../Services/email.js";
 
