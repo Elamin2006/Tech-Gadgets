@@ -27,14 +27,11 @@ const cartSchema = new mongoose.Schema(
                 }
             }
         ],
+        
         totalCartPrice: {
             type: Number,
             default: 0
         },
-        totalPriceAfterDiscount: {
-            type: Number,
-            default: undefined 
-        }
     },
     { timestamps: true }
 );

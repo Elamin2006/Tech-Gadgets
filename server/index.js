@@ -13,6 +13,7 @@ import errorHandler from "./Middlewares/errorHandler.js";
 import ApiError from "./Utils/ApiError.js";
 import path from "path";
 import {fileURLToPath} from "url";
+import cors from "cors";
 dotenv.config();
 
 const app = express();
@@ -23,6 +24,10 @@ const apiVersion = "/api/v1";
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(logger);
+app.use(cors()); 
+app.use("/uploads", express.static(path.join(path.resolve(), "Uploads")));
+
+
 
 // Routes
 app.use(`${apiVersion}/users`, userRouter);
@@ -31,7 +36,6 @@ app.use(`${apiVersion}/products`, productRouter);
 app.use(`${apiVersion}/cart`, cartRouter);
 app.use(`${apiVersion}/orders`, orderRouter);
 
-app.use("/Uploads", express.static(path.join(path.resolve(), "Uploads")));
 // Handle undefined routes
 app.all('*', (req, res, next) => {
     next(new ApiError(`Can't find this route:${req.method} ${req.originalUrl}`, 404));
@@ -52,3 +56,5 @@ async function startServer() {
 }
 
 startServer();
+
+export default app;
