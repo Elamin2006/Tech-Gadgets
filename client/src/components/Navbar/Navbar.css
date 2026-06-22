@@ -1,0 +1,152 @@
+/* 🌌 الهيكل الرئيسي للنافبار المظلم الشفاف */
+.elite-navbar {
+  background-color: rgba(15, 20, 24, 0.85) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(62, 72, 79, 0.3);
+  padding: 16px 0;
+  transition: all 0.3s ease-in-out;
+}
+
+/* ⚡ التنسيق عند التمرير لأسفل (عند إضافة كلاس fixed) */
+.elite-navbar.fixed {
+  padding: 10px 0;
+  background-color: #0a0f12 !important;
+  border-bottom-color: var(--color-primary-container);
+  box-shadow: 0 4px 20px rgba(56, 189, 248, 0.1);
+}
+
+.elite-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Sora', sans-serif;
+  color: var(--color-primary) !important;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+}
+
+.elite-brand ion-icon {
+  font-size: 24px;
+}
+
+.elite-nav-link {
+  color: var(--color-on-surface-variant) !important;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 8px 16px !important;
+  transition: color 0.2s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.elite-nav-link:hover {
+  color: var(--color-on-surface) !important;
+}
+
+/* 🛒 تنسيق أيقونة العربة والـ Badge الرقمي */
+.cart-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-on-surface);
+  transition: color 0.2s;
+  padding: 8px;
+}
+
+.cart-wrapper:hover {
+  color: var(--color-primary);
+}
+
+.cart-icon {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
+
+/* العداد الرقمي معتمد على data-num */
+.cart-wrapper::after {
+  content: attr(data-num);
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #ffb4ab;
+  color: #690005;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 50%;
+  padding: 2px 6px;
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 📱 إخفاء وإظهار العربة حسب الشاشة */
+.media-cart {
+  display: flex;
+  align-items: center;
+  margin-right: 12px;
+}
+
+@media (min-width: 768px) {
+  .media-cart {
+    display: none !important;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .expanded-cart {
+    display: none !important;
+  }
+}
+
+/* 🍔 زر القائمة المخصص للموبايل */
+.custom-toggler {
+  border: none !important;
+  padding: 4px;
+}
+
+.custom-toggler:focus {
+  box-shadow: none !important;
+}
+
+.toggler-icon-bar {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background-color: var(--color-on-surface);
+  margin: 5px 0;
+  transition: all 0.2s ease;
+}
+
+/* 🚪 تنسيقات أزرار تسجيل الدخول والخروج */
+.btn-logout-elite {
+  background-color: rgba(147, 0, 10, 0.2) !important;
+  color: var(--color-error) !important;
+  border: 1px solid rgba(255, 180, 171, 0.3) !important;
+  font-weight: 600;
+}
+
+.btn-logout-elite:hover {
+  background-color: var(--color-error-container) !important;
+  color: var(--color-on-error-container) !important;
+}
+
+.btn-signin-elite {
+  color: var(--color-on-surface-variant) !important;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.btn-signup-elite {
+  background-color: var(--color-primary-container) !important;
+  color: var(--color-on-primary-container) !important;
+  font-size: 14px;
+  font-weight: 600;
+  border: none !important;
+}
