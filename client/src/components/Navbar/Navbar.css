@@ -1,4 +1,3 @@
-/* 🌌 الهيكل الرئيسي للنافبار المظلم الشفاف */
 .elite-navbar {
   background-color: rgba(15, 20, 24, 0.85) !important;
   backdrop-filter: blur(12px);
@@ -8,7 +7,6 @@
   transition: all 0.3s ease-in-out;
 }
 
-/* ⚡ التنسيق عند التمرير لأسفل (عند إضافة كلاس fixed) */
 .elite-navbar.fixed {
   padding: 10px 0;
   background-color: #0a0f12 !important;
@@ -46,7 +44,6 @@
   color: var(--color-on-surface) !important;
 }
 
-/* 🛒 تنسيق أيقونة العربة والـ Badge الرقمي */
 .cart-wrapper {
   position: relative;
   display: flex;
@@ -67,7 +64,6 @@
   fill: currentColor;
 }
 
-/* العداد الرقمي معتمد على data-num */
 .cart-wrapper::after {
   content: attr(data-num);
   position: absolute;
@@ -86,7 +82,6 @@
   justify-content: center;
 }
 
-/* 📱 إخفاء وإظهار العربة حسب الشاشة */
 .media-cart {
   display: flex;
   align-items: center;
@@ -105,7 +100,6 @@
   }
 }
 
-/* 🍔 زر القائمة المخصص للموبايل */
 .custom-toggler {
   border: none !important;
   padding: 4px;
@@ -124,7 +118,6 @@
   transition: all 0.2s ease;
 }
 
-/* 🚪 تنسيقات أزرار تسجيل الدخول والخروج */
 .btn-logout-elite {
   background-color: rgba(147, 0, 10, 0.2) !important;
   color: var(--color-error) !important;

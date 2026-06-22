@@ -9,15 +9,12 @@ export default function NavBar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // 🧠 جلب الحالات الديناميكية من الـ Redux Store
   const { user } = useSelector((state) => state.auth);
-  // تأمين الكود في حال كانت مصفوفة السلة فارغة أو غير معرفة بعد
   const { cartList } = useSelector((state) => state.cart) || { cartList: [] };
 
   const [expanded, setExpanded] = useState(false);
   const [isFixed, setIsFixed] = useState(false);
 
-  // 🛡️ الحل الهندسي لمنع الـ Memory Leak باستخدام الـ Effect
   useEffect(() => {
     const scrollHandler = () => {
       if (window.scrollY >= 100) {
@@ -29,7 +26,6 @@ export default function NavBar() {
 
     window.addEventListener("scroll", scrollHandler);
     
-    // دالة التنظيف الحيوية عند مسح المكون من الشاشة
     return () => {
       window.removeEventListener("scroll", scrollHandler);
     };
@@ -51,13 +47,11 @@ export default function NavBar() {
     >
       <Container className="navbar-container">
         
-        {/* الشعار برابط داخلي ذكي */}
         <Navbar.Brand as={Link} to="/" className="elite-brand">
           <ion-icon name="bag"></ion-icon>
           <span style={{ fontSize: "1.4rem" }}>TECH_ELITE</span>
         </Navbar.Brand>
 
-        {/* 📱 العربة وزر الهامبرغر للموبايل */}
         <div className="d-flex align-items-center">
           <div className="media-cart">
             <Link
@@ -79,7 +73,6 @@ export default function NavBar() {
           </Navbar.Toggle>
         </div>
 
-        {/* 🧭 القائمة المنسدلة والروابط المشروطة */}
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className=" flex-grow-1 pe-3 align-items-md-center gap-2">
             
@@ -103,7 +96,6 @@ export default function NavBar() {
             </Nav>
 
             <Nav className="d-flex align-items-center ms-auto gap-3">
-            {/* 🖥️ عربة التسوق تظهر في الشاشات الكبيرة فقط */}
             <Nav.Item className="expanded-cart">
               <Link aria-label="Go to Cart Page" to="/cart" className="cart-wrapper" data-num={cartList.length}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="cart-icon">
@@ -112,7 +104,6 @@ export default function NavBar() {
               </Link>
             </Nav.Item>
 
-            {/* 🔄 عرض الأزرار بناء على حالة المستخدم المتصل */}
             {user ? (
               <>
                 <Nav.Item className="ms-md-2">
