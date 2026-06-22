@@ -1,18 +1,21 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import Home from "../pages/Home";
-import Login from "../pages/Login";
-import Cart from "../pages/Cart";
+import Home from "../pages/Home.jsx";
+import Login from "../pages/Login/Login.jsx";
+import Cart from "../pages/Cart.jsx";
+import Navbar from "../components/Navbar/Navbar.jsx";
 
-import ProtectedRoute from "./ProtectedRoute";
+import ProtectedRoutes from "./ProtectedRoutes.jsx";
 export default function AppRoutes() {
   return (
     <Router>
+        <Navbar />
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
+                
 
-                <Route element={<ProtectedRoute />}>
+                <Route element={<ProtectedRoutes />}>
                     <Route path="/cart" element={<Cart />} />
                 </Route>
 
