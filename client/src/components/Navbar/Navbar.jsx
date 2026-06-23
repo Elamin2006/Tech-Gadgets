@@ -74,7 +74,7 @@ export default function NavBar() {
         </div>
 
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className=" flex-grow-1 pe-3 align-items-md-center gap-2">
+          <Nav className="d-flex flex-grow-1 pe-3 align-items-md-center justify-content-sm-center gap-2">
             
             <Nav className="nav-links d-flex m-auto">
             <Nav.Item>
@@ -95,7 +95,7 @@ export default function NavBar() {
             </Nav.Item>
             </Nav>
 
-            <Nav className="d-flex align-items-center ms-auto gap-3">
+            <Nav className="d-flex align-items-center  gap-3">
             <Nav.Item className="expanded-cart">
               <Link aria-label="Go to Cart Page" to="/cart" className="cart-wrapper" data-num={cartList.length}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="cart-icon">
@@ -119,7 +119,7 @@ export default function NavBar() {
               </>
             ) : (
               <>
-                <Nav.Item className="ms-md-2">
+                <Nav.Item className="ms-md-2 d-flex justify-content-sm-center">
                   <Button as={Link} to="/login" variant="link" className="btn-signin-elite text-decoration-none p-0 pe-md-2" onClick={() => setExpanded(false)}>
                     Sign In
                   </Button>
