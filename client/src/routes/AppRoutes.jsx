@@ -4,6 +4,7 @@ import Home from "../pages/Home.jsx";
 import Login from "../pages/Login/Login.jsx";
 import Cart from "../pages/Cart.jsx";
 import Navbar from "../components/Navbar/Navbar.jsx";
+import Register from "../pages/Register/Register";
 
 import ProtectedRoutes from "./ProtectedRoutes.jsx";
 export default function AppRoutes() {
@@ -13,6 +14,7 @@ export default function AppRoutes() {
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
                 
 
                 <Route element={<ProtectedRoutes />}>
