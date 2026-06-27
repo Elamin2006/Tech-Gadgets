@@ -1,6 +1,8 @@
 // imports & confi
-import express from "express";
 import dotenv from "dotenv";
+dotenv.config();
+
+import express from "express";
 import { DBConnection } from "./config/mongoose.js";
 import morgan from "morgan";
 import { logger } from "./Utils/logger.js";
@@ -14,7 +16,6 @@ import ApiError from "./Utils/apiError.js";
 import path from "path";
 import {fileURLToPath} from "url";
 import cors from "cors";
-dotenv.config();
 
 // ES module equivalent of __dirname
 const __filename = fileURLToPath(import.meta.url);
