@@ -7,6 +7,8 @@ import Navbar from "../components/Navbar/Navbar.jsx";
 import Register from "../pages/Register/Register";
 
 import ProtectedRoutes from "./ProtectedRoutes.jsx";
+import Shop from "../pages/Shop/Shop";
+
 export default function AppRoutes() {
   return (
     <Router>
@@ -15,7 +17,7 @@ export default function AppRoutes() {
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
-                
+                <Route path="/shop" element={<Shop />} />
 
                 <Route element={<ProtectedRoutes />}>
                     <Route path="/cart" element={<Cart />} />
