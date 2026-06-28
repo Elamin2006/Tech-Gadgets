@@ -1,8 +1,13 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addItemToCart } from "../../store/slices/cartSlice";
 import "./ProductCard.css";
 
 export default function ProductCard({ product }) {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const imageUrl =
     product.image || "https://placehold.co/600x400/171c20/dee3e8?text=No+Image";
 
@@ -15,6 +20,18 @@ export default function ProductCard({ product }) {
   const discountedPrice = hasDiscount
     ? originalPrice - originalPrice * (product.discount / 100)
     : originalPrice;
+
+  const handleAddToCart = () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      alert("Please login first to manage your live cart! ");
+      navigate("/login");
+      return;
+    }
+
+    dispatch(addItemToCart({ productId: product._id, quantity: 1 }));
+  };
 
   return (
     <div className="col-lg-4 col-md-6 col-sm-6 col-12 mb-4">
@@ -52,7 +69,7 @@ export default function ProductCard({ product }) {
                 <span className="text-success font-weight-bold">
                   ${discountedPrice.toLocaleString()}
                 </span>
-                <span className="text-muted text-decoration-line-through fs-6">
+                <span className=" text-decoration-line-through fs-6">
                   ${originalPrice.toLocaleString()}
                 </span>
               </>
@@ -69,7 +86,12 @@ export default function ProductCard({ product }) {
           >
             Details
           </Link>
-          <button className="btn btn-elite-primary w-50">Add To Cart</button>
+          <button
+            className="btn btn-elite-primary w-50"
+            onClick={handleAddToCart}
+          >
+            Add To Cart
+          </button>
         </div>
       </div>
     </div>
