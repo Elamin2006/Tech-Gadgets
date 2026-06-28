@@ -2,32 +2,26 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./ProductCard.css";
 
-export default function ProductCard({ product, isDiscountPage }) {
-  const SERVER_URL = "https://tech-gadgets-server-kappa.vercel.app";
-  
-  let imageUrl = "https://placehold.co/600x400/171c20/dee3e8?text=No+Image";
-  
-  if (product.image) {
-    if (product.image.startsWith("http")) {
-      imageUrl = product.image;
-    } else if (product.image.startsWith("/uploads") || product.image.startsWith("/api/images")) {
-      
-      imageUrl = "https://placehold.co/600x400/171c20/dee3e8?text=Legacy+Asset";
-    } else {
-      imageUrl = `${SERVER_URL}${product.image}`;
-    }
-  }
+export default function ProductCard({ product }) {
+  const imageUrl =
+    product.image || "https://placehold.co/600x400/171c20/dee3e8?text=No+Image";
 
-  const title = product.name || product.title || "Tactical Hardware";
-  const description = product.description || "No specifications provided for this elite item.";
+  const title = product.name || "Tactical Hardware";
+  const description =
+    product.description || "No specifications provided for this elite item.";
+
+  const hasDiscount = product.discount > 0;
+  const originalPrice = product.price || 0;
+  const discountedPrice = hasDiscount
+    ? originalPrice - originalPrice * (product.discount / 100)
+    : originalPrice;
 
   return (
     <div className="col-lg-4 col-md-6 col-sm-6 col-12 mb-4">
       <div className="card h-100 elite-product-card position-relative">
-        
-        {product.discount > 0 && isDiscountPage ? (
+        {hasDiscount && (
           <span className="elite-discount-badge">{product.discount}% OFF</span>
-        ) : null}
+        )}
 
         <div className="elite-card-img-wrapper">
           <img
@@ -36,7 +30,8 @@ export default function ProductCard({ product, isDiscountPage }) {
             className="card-img-top elite-card-img"
             alt={title}
             onError={(e) => {
-              e.target.src = "https://placehold.co/600x400/171c20/dee3e8?text=Image+Not+Found";
+              e.target.src =
+                "https://placehold.co/600x400/171c20/dee3e8?text=Image+Not+Found";
             }}
           />
         </div>
@@ -46,11 +41,24 @@ export default function ProductCard({ product, isDiscountPage }) {
             {title.length > 25 ? `${title.substring(0, 25)}...` : title}
           </h5>
           <p className="elite-card-text flex-grow-1">
-            {description.length > 85 ? `${description.substring(0, 85)}...` : description}
+            {description.length > 85
+              ? `${description.substring(0, 85)}...`
+              : description}
           </p>
-          
-          <div className="elite-price-tag lead mb-3">
-            ${product.price ? product.price.toLocaleString() : "0"}
+
+          <div className="elite-price-tag lead mb-3 d-flex align-items-center gap-2">
+            {hasDiscount ? (
+              <>
+                <span className="text-success font-weight-bold">
+                  ${discountedPrice.toLocaleString()}
+                </span>
+                <span className="text-muted text-decoration-line-through fs-6">
+                  ${originalPrice.toLocaleString()}
+                </span>
+              </>
+            ) : (
+              <span>${originalPrice.toLocaleString()}</span>
+            )}
           </div>
         </div>
 
@@ -61,11 +69,8 @@ export default function ProductCard({ product, isDiscountPage }) {
           >
             Details
           </Link>
-          <button className="btn btn-elite-primary w-50">
-            Add To Cart
-          </button>
+          <button className="btn btn-elite-primary w-50">Add To Cart</button>
         </div>
-
       </div>
     </div>
   );
