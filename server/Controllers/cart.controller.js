@@ -79,15 +79,22 @@ export const getLoggedUserCart = asyncHandler(async (req, res, next) => {
 // Remove Product From Cart
 export const removeFromCart = asyncHandler(async (req, res, next) => {
     const { itemId } = req.params;
+    const userId = req.user?._id;
 
-    const cart = await Cart.findOneAndUpdate(
-        { userId: req.user?._id },
-        { $pull: { cartItems: { _id: itemId } } },
-        { new: true }
-    );
+    let cart = await Cart.findOne({ userId });
     if (!cart) {
         throw new ApiError("No Cart Found For This User", 404);
     }
+const itemExists = cart.cartItems.some(item => item._id.toString() === itemId);
+    if (!itemExists) {
+        throw new ApiError("This item is no longer in your cart", 404);
+    }
+    cart.cartItems.pull(itemId );
+
+    calcTotalCartPrice(cart);
+
+    await cart.save();
+
     res.status(200).json({
         status: "Success",
         numOfCartItems: cart.cartItems.length,

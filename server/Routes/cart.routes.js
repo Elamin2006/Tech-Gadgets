@@ -19,7 +19,7 @@ cartRouter.route("/")
     .get(getLoggedUserCart)
     .post(validatorMiddleware(addToCartSchema), addToCart)
     .delete(clearCart);
-cartRouter.route("/removeItem")
+cartRouter.route("/:itemId")
     .delete(removeFromCart);
 
 export default cartRouter;
