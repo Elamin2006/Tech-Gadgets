@@ -2,6 +2,8 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addItemToCart } from "../../store/slices/cartSlice";
+import { toast } from "react-toastify";
+
 import "./ProductCard.css";
 
 export default function ProductCard({ product }) {
@@ -29,6 +31,7 @@ export default function ProductCard({ product }) {
       navigate("/login");
       return;
     }
+    toast.success("Product has been added to cart!");
 
     dispatch(addItemToCart({ productId: product._id, quantity: 1 }));
   };
