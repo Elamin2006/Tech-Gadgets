@@ -1,13 +1,11 @@
-/* 🚀 السكشن الخارجي لحماية الصفحة من الاختفاء تحت الـ Navbar */
 .login-page-section {
-  padding-top: 80px; /* يعوض ارتفاع الـ Fixed Navbar تماماً */
+
   background-color: var(--bg-surface-dim);
-  min-height: 100vh; /* يضمن تغطية الشاشة بالكامل */
+  min-height: 100vh; 
   display: flex;
   align-items: center;
 }
 
-/* تعديل الحاوية الداخلية لتأخذ الارتفاع الصافي المتبقي من الشاشة */
 .login-container {
   min-height: calc(100vh - 80px); 
   background-color: var(--bg-surface-dim);
@@ -17,7 +15,7 @@
 .login-brand-side {
   background-color: var(--bg-surface-lowest);
   position: relative;
-  min-height: calc(100vh - 80px); /* ليملأ الجزء المتبقي بالكامل على اليسار */
+  min-height: calc(100vh - 80px); 
 }
 
 .tech-grid-overlay {

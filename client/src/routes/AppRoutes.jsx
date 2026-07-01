@@ -6,7 +6,7 @@ import { ToastContainer } from "react-toastify";
 
 import Home from "../pages/Home.jsx";
 import Login from "../pages/Login/Login.jsx";
-import Cart from "../pages/Cart.jsx";
+import Cart from "../pages/Cart/Cart.jsx";
 import Navbar from "../components/Navbar/Navbar.jsx";
 import Register from "../pages/Register/Register";
 
