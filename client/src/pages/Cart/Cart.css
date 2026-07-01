@@ -1,0 +1,95 @@
+.cart-items {
+  min-height: 80vh;
+  background-color: var(--bg-surface-lowest, #0f1316);
+}
+
+.cart-list {
+  background-color: var(--bg-surface-low, #171c20);
+  border: 1px solid var(--color-outline-variant, #2d3748);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.cart-list:hover {
+  border-color: #0dcaf0;
+  transform: translateY(-2px);
+}
+
+.image-holder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #1f272e;
+  padding: 10px;
+  border-radius: 6px;
+  min-height: 110px;
+}
+
+.cart-details h3 {
+  color: #ffffff;
+  letter-spacing: 0.5px;
+}
+
+.cart-details h4 {
+  display: flex;
+  align-items: center;
+}
+
+.cart-details h4 span {
+  background-color: rgba(40, 167, 69, 0.15);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.cartControl button {
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.cartControl .incCart:hover {
+  background-color: #0dcaf0 !important;
+  color: #000000 !important;
+}
+
+.cartControl .desCart:hover:not(:disabled) {
+  background-color: #6c757d !important;
+  color: #ffffff !important;
+}
+
+.delete-btn {
+  position: absolute !important;
+  top: 12px !important;
+  right: 12px !important;
+  width: 36px !important;
+  height: 36px !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 50% !important; 
+  z-index: 5;
+  transition: all 0.2s ease;
+}
+
+.delete-btn:hover {
+  color: #ff4d4d !important;
+  transform: scale(1.1);
+}
+
+.cart-total {
+  background-color: var(--bg-surface-low, #171c20);
+  border: 1px solid var(--color-outline-variant, #2d3748);
+  position: sticky;
+  top: 100px;
+}
+
+.cart-total h2 {
+  border-color: #2d3748 !important;
+  letter-spacing: 0.5px;
+}
