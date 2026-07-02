@@ -1,0 +1,52 @@
+.product-reviews-section {
+  background-color: #0f1316 !important;
+  border-top: 1px solid #2d3748;
+}
+
+.review-tab-item {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  user-select: none;
+  position: relative;
+  padding-bottom: 8px;
+}
+
+.active-tab {
+  color: #0dcaf0 !important;
+}
+
+.active-tab::after {
+  content: "";
+  position: absolute;
+  bottom: -9px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #0dcaf0;
+}
+
+.inactive-tab {
+  color: #718096 !important;
+}
+
+.inactive-tab:hover {
+  color: #a0aec0 !important;
+}
+
+.tab-content-panel, .rate-comment-card {
+  background-color: #171c20;
+  transition: border-color 0.3s ease;
+}
+
+.rate-comment-card:hover {
+  border-color: #0dcaf0 !important;
+}
+
+.elite-desc-text, .review-comment-body {
+  color: #8892b0 !important;
+  line-height: 1.6;
+}
+
+.border-dashed {
+  border-style: dashed !important;
+}
