@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { Container, Row, Col, Spinner, Alert } from "react-bootstrap";
-import axios from "axios";
+import API from "../../services/api";
 
 import Banner from "../../components/Banner/Banner";
 import FilterSelect from "../../components/Filter/FilterSelect";
@@ -21,9 +21,9 @@ const Shop = () => {
     const fetchLiveProducts = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get(
-          "https://tech-gadgets-server-kappa.vercel.app/api/v1/products",
-        );
+        
+        const response = await API.get("/products");
+        
         const fetchedData = response.data?.data || response.data || [];
 
         setProducts(fetchedData);
@@ -77,6 +77,7 @@ const Shop = () => {
               ⚠️ {apiError}
             </Alert>
           ) : (
+            
             <ShopList productItems={filterList} />
           )}
         </Container>
