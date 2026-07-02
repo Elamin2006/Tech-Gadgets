@@ -12,6 +12,7 @@ import Register from "../pages/Register/Register";
 
 import ProtectedRoutes from "./ProtectedRoutes.jsx";
 import Shop from "../pages/Shop/Shop";
+import Product from "../pages/Product/Product.jsx";
 
 export default function AppRoutes() {
   const dispatch = useDispatch();
@@ -42,7 +43,7 @@ export default function AppRoutes() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/shop" element={<Shop />} />
-
+        <Route  path="/product/:id" element= {<Product/>}/>
         <Route element={<ProtectedRoutes />}>
           <Route path="/cart" element={<Cart />} />
         </Route>
