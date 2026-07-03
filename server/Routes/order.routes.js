@@ -22,14 +22,11 @@ orderRouter.use(authentication);
 
 // 🛍️ 1. مسار إنشاء طلب كاش (للمستخدم المسجل)
 orderRouter.route("/")
-    .post(validatorMiddleware(createCashOrderSchema), createCashOrder);
-
-// 📋 2. مسارات التحكم للـ Admin فقط (إدارة النظام)
-orderRouter.route("/")
-    .get(allowedTo("admin"), getAllOrders); // جلب جميع طلبات المتجر
+    .post(validatorMiddleware(createCashOrderSchema), createCashOrder)
+    .get(getAllOrders); // المستخدم يرى طلباته، والأدمن يرى الكل
 
 orderRouter.route("/:orderId")
-    .get(allowedTo("admin"), getOrderById) // جلب تفاصيل طلب محدد
+    .get(getOrderById) // المستخدم يرى طلبه فقط، والأدمن يرى أي طلب
     .patch(allowedTo("admin"), updateOrderStatus) // تحديث حالة الدفع أو التوصيل
     .delete(allowedTo("admin"), deleteOrderById); // حذف أو إلغاء طلب
 

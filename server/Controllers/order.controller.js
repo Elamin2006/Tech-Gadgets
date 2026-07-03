@@ -50,18 +50,17 @@ export const getAllOrders = asyncHandler(async (req, res, next) => {
   const userId = req.user?._id;
 
   if (!userId) {
-    return res
-      .status(401)
-      .json({
-        status: "fail",
-        message: "Unauthorized asset deployment access.",
-      });
+    return res.status(401).json({
+      status: "fail",
+      message: "Unauthorized access.",
+    });
   }
 
-  const allOrders = await Order.find({ userId }).populate(
-    "userId",
-    "name email",
-  );
+  const filter = req.user?.role === "admin" ? {} : { userId };
+
+  const allOrders = await Order.find(filter)
+    .populate("userId", "name email")
+    .sort({ createdAt: -1 });
 
   res.status(200).json({
     status: "success",
@@ -80,6 +79,11 @@ export const getOrderById = asyncHandler(async (req, res, next) => {
 
   if (!order) {
     throw new ApiError(`No order found with this ID: ${orderId}`, 404);
+  }
+
+  const isOwner = order.userId?.toString() === req.user?._id?.toString();
+  if (req.user?.role !== "admin" && !isOwner) {
+    throw new ApiError("You are not allowed to access this order", 403);
   }
 
   res.status(200).json({ status: "success", data: order });
