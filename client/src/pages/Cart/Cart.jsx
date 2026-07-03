@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom"; 
 import { Col, Container, Row, Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { CartService } from "../../services/cart.service.js";
@@ -6,6 +7,7 @@ import { fetchCart } from "../../store/slices/cartSlice";
 import "./Cart.css";
 const Cart = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const cartState = useSelector((state) => state.cart || {});
   const {
@@ -186,7 +188,9 @@ const Cart = () => {
                   ${totalPrice?.toLocaleString()}.00
                 </h3>
               </div>
-              <button className="btn btn-info w-100 text-dark fw-bold py-3 mt-4 rounded-3 fs-5">
+              <button 
+              className="btn btn-info w-100 text-dark fw-bold py-3 mt-4 rounded-3 fs-5"
+              onClick={()=> navigate("/orders")}>
                 Order Now
               </button>
             </div>
