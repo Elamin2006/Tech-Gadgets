@@ -98,13 +98,11 @@ export const deleteOrderById = asyncHandler(async (req, res, next) => {
     throw new ApiError(`No order found with this ID: ${orderId}`, 404);
   }
 
-  res
-    .status(200)
-    .json({
-      status: "success",
-      message: "Order deleted successfully",
-      deletedOrder: order,
-    });
+  res.status(200).json({
+    status: "success",
+    message: "Order deleted successfully",
+    deletedOrder: order,
+  });
 });
 
 // Update Order Status
