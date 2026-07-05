@@ -13,6 +13,7 @@ import Register from "../pages/Register/Register";
 import ProtectedRoutes from "./ProtectedRoutes.jsx";
 import Shop from "../pages/Shop/Shop";
 import Product from "../pages/Product/Product.jsx";
+import Orders from "../pages/Order/Order.jsx";
 
 export default function AppRoutes() {
   const dispatch = useDispatch();
@@ -46,6 +47,8 @@ export default function AppRoutes() {
         <Route  path="/product/:id" element= {<Product/>}/>
         <Route element={<ProtectedRoutes />}>
           <Route path="/cart" element={<Cart />} />
+          <Route path="/orders" element={<Orders />} />
+
         </Route>
 
         <Route

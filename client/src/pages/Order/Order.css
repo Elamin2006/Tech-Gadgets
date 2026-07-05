@@ -1,0 +1,51 @@
+.orders-page-wrapper {
+  padding-top: 80px;
+}
+
+.bg-panel {
+  background-color: #171c20 !important;
+}
+
+.bg-header-panel {
+  background-color: #1f262c !important;
+}
+
+.bg-dark-deep {
+  background-color: #0f1316;
+}
+
+.orders-page-wrapper .text-muted {
+  color: #b2bec3 !important; 
+}
+
+.order-master-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-width: 1px !important;
+}
+
+.order-master-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(13, 202, 240, 0.1);
+}
+
+.table-dark {
+  --bs-table-bg: #171c20 !important;
+  --bs-table-hover-bg: #1f262c !important;
+  color: #ffffff !important;
+}
+
+.block-id {
+  letter-spacing: 1px;
+}
+
+.border-dashed {
+  border-style: dashed !important;
+}
+
+@media (max-width: 991.98px) {
+  .border-secondary-mobile {
+    border-left: none !important;
+    border-top: 1px solid #6c757d !important;
+    padding-top: 20px;
+  }
+}
