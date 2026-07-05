@@ -99,14 +99,25 @@ export default function NavBar() {
               </Link>
             </Nav.Item>
             <Nav.Item>
-              <Link aria-label="Go to Shop Page" 
-              className="elite-nav-link" to="/shop" 
+              <Link aria-label="Go to Cart Page" 
+              className="elite-nav-link" to="/cart" 
               onClick={() => setExpanded(false)}
               >
                 Cart
               </Link>
             </Nav.Item>
+  {user && (
+    <Nav.Item>
+      <Link aria-label="Go to Orders Page" 
+            className="elite-nav-link text-warning fw-bold" to="/orders" 
+            onClick={() => setExpanded(false)}>
+        Orders
+      </Link>
+    </Nav.Item>
+  )}
+
             </Nav>
+            
 
             <Nav className="d-flex align-items-center  gap-3">
             <Nav.Item className="expanded-cart">
