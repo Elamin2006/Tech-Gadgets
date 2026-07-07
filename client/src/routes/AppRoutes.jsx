@@ -1,19 +1,21 @@
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { fetchCart } from "../store/slices/cartSlice";
 import { ToastContainer } from "react-toastify";
 
+// Layout Wrapper
+import MainLayout from "../layouts/MainLayout";
+
+// Views / Pages
 import Home from "../pages/Home.jsx";
 import Login from "../pages/Login/Login.jsx";
 import Cart from "../pages/Cart/Cart.jsx";
-import Navbar from "../components/Navbar/Navbar.jsx";
 import Register from "../pages/Register/Register";
-
-import ProtectedRoutes from "./ProtectedRoutes.jsx";
 import Shop from "../pages/Shop/Shop";
 import Product from "../pages/Product/Product.jsx";
 import Orders from "../pages/Order/Order.jsx";
+import ProtectedRoutes from "./ProtectedRoutes.jsx";
 
 export default function AppRoutes() {
   const dispatch = useDispatch();
@@ -24,39 +26,33 @@ export default function AppRoutes() {
       dispatch(fetchCart());
     }
   }, [dispatch]);
+
   return (
     <Router>
-      <ToastContainer
-        position="top-right"
-        autoClose={2000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-        toastClassName="elite-toast"
-      />
-      <Navbar />
+      <ToastContainer theme="dark" toastClassName="elite-toast" />
+
       <Routes>
-        <Route path="/" element={<Home />} />
+        // Main Layout Routes With Navbar / Footer
+        <Route element={<MainLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/shop" element={<Shop />} />
+          <Route path="/product/:id" element={<Product />} />
+          // protected routes for authenticated users
+          <Route element={<ProtectedRoutes />}>
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/orders" element={<Orders />} />
+          </Route>
+        </Route>
+        // Login and Register pages are isolated from the main layout
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/shop" element={<Shop />} />
-        <Route  path="/product/:id" element= {<Product/>}/>
-        <Route element={<ProtectedRoutes />}>
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/orders" element={<Orders />} />
-
-        </Route>
-
+        // catch all not found routes
         <Route
           path="*"
           element={
-            <h2 style={{ textAlign: "center", marginTop: "50px" }}>
-              404 - Page Not Found{" "}
-            </h2>
+            <main className="d-flex align-items-center justify-content-center min-vh-100">
+              <h2 className="text-center">404 - Page Not Found</h2>
+            </main>
           }
         />
       </Routes>
