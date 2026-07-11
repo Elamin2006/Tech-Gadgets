@@ -2,9 +2,16 @@ import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 dotenv.config();
 
-if (!process.env.EMAIL || !process.env.USERPASS) {
+const emailUser = process.env.EMAIL;
+const emailPassword = (
+  process.env.USERPASS ||
+  process.env.GMAIL_APP_PASSWORD ||
+  process.env.APP_PASSWORD || "")
+.replace(/\s+/g, "");
+
+if (!emailUser || !emailPassword) {
   throw new Error(
-    "CRITICAL: Email credentials (EMAIL or USERPASS) are missing in .env file!",
+    "CRITICAL: Email credentials (EMAIL or USERPASS/GMAIL_APP_PASSWORD/APP_PASSWORD) are missing in .env file!",
   );
 }
 
@@ -14,8 +21,8 @@ export const transporter = nodemailer.createTransport({
   port: 587,
   secure: false,
   auth: {
-    user: process.env.EMAIL,
-    pass: process.env.USERPASS,
+    user: emailUser,
+    pass: emailPassword,
   },
 });
 
@@ -117,7 +124,8 @@ export const sendMail = async (mailOptions) => {
     console.log("[Email Success]: Email sent successfully.");
     return info;
   } catch (error) {
-    throw new Error(`Email delivery failed: ${error.message}`);
+    const detail = error?.response || error?.message || "Unknown SMTP error";
+    throw new Error(`Email delivery failed: ${detail}`);
   }
 };
 
