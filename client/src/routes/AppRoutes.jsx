@@ -10,6 +10,9 @@ import MainLayout from "../layouts/MainLayout";
 // Views / Pages
 import Home from "../pages/Home.jsx";
 import Login from "../pages/Login/Login.jsx";
+import ForgotPassword from "../pages/ForgotPassword/ForgotPassword.jsx";
+import VerifyResetCode from "../pages/VerifyResetCode/VerifyResetCode.jsx";  
+import ResetPassword from "../pages/ResetPassword/ResetPassword.jsx";
 import Cart from "../pages/Cart/Cart.jsx";
 import Register from "../pages/Register/Register";
 import Shop from "../pages/Shop/Shop";
@@ -46,6 +49,9 @@ export default function AppRoutes() {
         // Login and Register pages are isolated from the main layout
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/verify-reset-code" element={<VerifyResetCode />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         // catch all not found routes
         <Route
           path="*"
