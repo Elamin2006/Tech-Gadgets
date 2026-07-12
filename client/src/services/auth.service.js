@@ -42,5 +42,34 @@ export const AuthService = {
     getCurrentUser: () => {
         const user = localStorage.getItem("user");
         return user ? JSON.parse(user) : null;
+    },
+    // 1. Reset Code Generation
+    forgotPassword: async (email) => {
+        try {
+            const response = await API.post("/users/forgot-password", { email });
+            return response.data;
+        } catch (error) {
+            throw error.response?.data || { message: "Failed to process recovery request" };
+        }
+    },
+
+    // 2. Verify Passcode 
+    verifyResetCode: async (email, resetCode) => {
+        try {
+            const response = await API.post("/users/verify-reset-code", { email, resetCode });
+            return response.data;
+        } catch (error) {
+            throw error.response?.data || { message: "Invalid or expired verification code" };
+        }
+    },
+
+    // 3. Password Overwrite
+    resetPassword: async (email, newPassword) => {
+        try {
+            const response = await API.post("/users/reset-password", { email, newPassword });
+            return response.data;
+        } catch (error) {
+            throw error.response?.data || { message: "Failed to overwrite database credentials" };
+        }
     }
 };
