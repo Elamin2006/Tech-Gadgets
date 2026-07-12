@@ -86,7 +86,8 @@ export default function Login() {
           <Col
             xs={12}
             lg={6}
-            className="d-flex flex-column align-items-center justify-content-center p-4 p-md-5 position-relative"
+            className="d-flex flex-column align-items-center 
+            justify-content-center  p-md-4 position-relative"
           >
             <div className="position-absolute top-0 start-50 translate-middle-x mt-4 d-lg-none">
               <span className="login-title h2">TECH_ELITE</span>
@@ -94,15 +95,15 @@ export default function Login() {
 
             <div className="login-form-wrapper mt-5 mt-lg-0">
               <header className="mb-4 text-start">
-                <h2 className="login-subtitle mb-2">Welcome Back</h2>
-                <p
+                <h2 className="login-subtitle mb-2">Welcome Back to Login</h2>
+                {/* <p
                   style={{
                     color: "var(--color-on-surface-variant)",
                     fontSize: "15px",
                   }}
                 >
                   Enter your credentials to access your professional workspace.
-                </p>
+                </p> */}
               </header>
 
               {isError && (

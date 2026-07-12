@@ -7,7 +7,7 @@
 }
 
 .login-container {
-  min-height: calc(100vh - 80px); 
+  min-height: 100vh; 
   background-color: var(--bg-surface-dim);
   width: 100%;
 }
@@ -15,7 +15,7 @@
 .login-brand-side {
   background-color: var(--bg-surface-lowest);
   position: relative;
-  min-height: calc(100vh - 80px); 
+  min-height: 100vh; 
 }
 
 .tech-grid-overlay {
