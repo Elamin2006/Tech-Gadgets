@@ -1,0 +1,16 @@
+.verification-code-field {
+  text-align: center;
+  font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, monospace;
+  font-weight: 800;
+  letter-spacing: 6px;
+  font-size: 1.25rem !important;
+  color: var(--color-primary) !important;
+}
+
+.target-locked-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: var(--bg-surface-dim) !important;
+  border-color: var(--color-outline-variant) !important;
+  color: var(--color-on-surface-variant) !important;
+}
