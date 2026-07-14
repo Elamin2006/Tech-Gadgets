@@ -7,6 +7,10 @@ import { ToastContainer } from "react-toastify";
 // Layout Wrapper
 import MainLayout from "../layouts/MainLayout";
 
+// Admin Components
+import AdminRoute from "./AdminRoute.jsx";
+import AdminLayout from "../layouts/AdminLayout.jsx";
+
 // Views / Pages
 import Home from "../pages/Home.jsx";
 import Login from "../pages/Login/Login.jsx";
@@ -40,18 +44,31 @@ export default function AppRoutes() {
           <Route path="/" element={<Home />} />
           <Route path="/shop" element={<Shop />} />
           <Route path="/product/:id" element={<Product />} />
+
           // protected routes for authenticated users
           <Route element={<ProtectedRoutes />}>
             <Route path="/cart" element={<Cart />} />
             <Route path="/orders" element={<Orders />} />
           </Route>
         </Route>
+
         // Login and Register pages are isolated from the main layout
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/verify-reset-code" element={<VerifyResetCode />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+
+        // Protected Admin Portal Route Hierarchy
+        <Route element={<AdminRoute />}>
+          <Route element={<AdminLayout />}>
+            <Route path="/admin/dashboard" element={<h1 style={{ color: "#f0f6fc" }}>OVERVIEW_STATS_PANEL</h1>} />
+            <Route path="/admin/users" element={<h1 style={{ color: "#f0f6fc" }}>USER_NODES_LIST</h1>} />
+            <Route path="/admin/products" element={<h1 style={{ color: "#f0f6fc" }}>INVENTORY_LOGS</h1>} />
+            <Route path="/admin/orders" element={<h1 style={{ color: "#f0f6fc" }}>ORDER_TRANSACTIONS</h1>} />
+          </Route>
+        </Route>
+
         // catch all not found routes
         <Route
           path="*"
