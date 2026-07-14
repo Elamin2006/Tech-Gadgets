@@ -1,0 +1,109 @@
+.admin-sidebar {
+  width: 280px;
+  background-color: #161b22;
+  border-right: 1px solid #30363d;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.admin-brand-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid #30363d;
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.tech-logo {
+  color: #f0f6fc;
+}
+
+.tech-logo-highlight {
+  color: #58a6ff;
+}
+
+.admin-nav-menu {
+  flex: 1;
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.admin-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  color: #8b9bb4;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.admin-nav-link span.material-symbols-outlined {
+  font-size: 20px;
+}
+
+.admin-nav-link:hover {
+  background-color: #21262d;
+  color: #f0f6fc;
+}
+
+.admin-nav-link.active {
+  background-color: #21262d;
+  color: #58a6ff;
+  border-left: 3px solid #58a6ff;
+  border-radius: 0 6px 6px 0;
+}
+
+.admin-profile-footer {
+  padding: 1.25rem;
+  border-top: 1px solid #30363d;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background-color: #0d1117;
+}
+
+.admin-meta {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.meta-role {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #58a6ff;
+  letter-spacing: 0.5px;
+}
+
+.meta-email {
+  font-size: 0.75rem;
+  color: #8b9bb4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-logout-btn {
+  background: transparent;
+  border: none;
+  color: #f85149;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.admin-logout-btn:hover {
+  background-color: rgba(248, 81, 73, 0.1);
+}
