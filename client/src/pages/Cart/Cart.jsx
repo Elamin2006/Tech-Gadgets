@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Col, Container, Row, Spinner, Form, Alert } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { CartService } from "../../services/cart.service.js";
+import { CartService } from "../../services/customer/cart.service.js";
 import { fetchCart, clearUserCart } from "../../store/slices/cartSlice";
-import OrderService from "../../services/order.service";
+import OrderService from "../../services/customer/order.service";
 import "./Cart.css";
 
 const Cart = () => {

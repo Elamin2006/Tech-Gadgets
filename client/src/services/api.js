@@ -21,4 +21,19 @@ API.interceptors.request.use(
     }
 );
 
+API.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      
+      if (!window.location.pathname.includes("/login")) {
+        window.location.href = "/login?expired=true";
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
 export default API;
