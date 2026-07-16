@@ -11,16 +11,17 @@ import categoryRouter from "./Routes/category.routes.js";
 import productRouter from "./Routes/product.routes.js";
 import cartRouter from "./Routes/cart.routes.js";
 import orderRouter from "./Routes/order.routes.js";
+import adminRouter from "./Routes/admin.routes.js";
 import errorHandler from "./Middlewares/errorHandler.js";
 import ApiError from "./Utils/apiError.js";
 import path from "path";
-import {fileURLToPath} from "url";
+import { fileURLToPath } from "url";
 import cors from "cors";
 
 // ES module equivalent of __dirname
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
- 
+
 const app = express();
 const port = process.env.PORT || 5000;
 const apiVersion = "/api/v1";
@@ -31,8 +32,7 @@ if (process.env.NODE_ENV === "development") {
 }
 app.use(express.json());
 app.use(logger);
-app.use(cors()); 
-
+app.use(cors());
 
 // Routes
 app.use(`${apiVersion}/users`, userRouter);
@@ -40,10 +40,13 @@ app.use(`${apiVersion}/categories`, categoryRouter);
 app.use(`${apiVersion}/products`, productRouter);
 app.use(`${apiVersion}/cart`, cartRouter);
 app.use(`${apiVersion}/orders`, orderRouter);
+app.use(`${apiVersion}/admin`, adminRouter);
 
 // Handle undefined routes
-app.all('*', (req, res, next) => {
-    next(new ApiError(`Can't find this route:${req.method} ${req.originalUrl}`, 404));
+app.all("*", (req, res, next) => {
+  next(
+    new ApiError(`Can't find this route:${req.method} ${req.originalUrl}`, 404),
+  );
 });
 // Global Error Handler
 app.use(errorHandler);
