@@ -9,7 +9,7 @@ import MainLayout from "../layouts/MainLayout";
 
 // Admin Components
 import AdminRoute from "./AdminRoute.jsx";
-import AdminLayout from "../layouts/AdminLayout.jsx";
+import AdminLayout from "../layouts/AdminLayout/AdminLayout.jsx";
 
 // Views / Pages
 import Home from "../pages/Home.jsx";
