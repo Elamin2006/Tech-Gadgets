@@ -22,7 +22,12 @@ export default function Login() {
 
   useEffect(() => {
     if (isSuccess || user) {
-      navigate(redirectTo, { replace: true });
+      if (location.state?.from?.pathname) {
+        navigate(location.state.from.pathname, { replace: true });
+      } else {
+        const defaultRoute = user?.role === "admin" ? "/admin/dashboard" : "/";
+        navigate(defaultRoute, { replace: true });
+      }
     }
     return () => {
       dispatch(resetAuthState());
