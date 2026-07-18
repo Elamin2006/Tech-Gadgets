@@ -12,3 +12,7 @@ build
 
 *.log
 npm-debug.log*
+CLIENT_DOCS.md
+repo-tree.txt
+suggested-tree.txt
+README.md
