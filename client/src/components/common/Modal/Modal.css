@@ -1,40 +1,11 @@
-.app-loader-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
-  gap: 12px;
-}
-
-.app-spinner {
-  border: 3px solid #e5e7eb;
-  border-top-color: #2563eb;
-  border-radius: 50%;
-  animation: global-spin 0.8s linear infinite;
-}
-
-.loader-size-sm .app-spinner { width: 24px; height: 24px; }
-.loader-size-md .app-spinner { width: 40px; height: 40px; }
-.loader-size-lg .app-spinner { width: 56px; height: 56px; }
-
-.app-loader-text {
-  color: #4b5563;
-  font-size: 0.875rem;
-  font-weight: 500;
-  margin: 0;
-}
-
-@keyframes global-spin {
-  to { transform: rotate(360deg); }
-}.elite-modal-overlay {
+.elite-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(15, 23, 42, 0.6);
-  backdrop-filter: blur(4px);
+  background-color: rgba(10, 15, 18, 0.75);
+  backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -43,9 +14,10 @@
 }
 
 .elite-modal-window {
-  background: #ffffff;
+  background: var(--bg-surface-low);
+  border: 1px solid var(--color-outline-variant);
   border-radius: 12px;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
   width: 100%;
   max-width: 550px;
   display: flex;
@@ -59,20 +31,20 @@
   align-items: center;
   justify-content: space-between;
   padding: 18px 24px;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid var(--color-outline-variant);
 }
 
 .elite-modal-title {
   font-size: 1.125rem;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--color-on-surface);
   margin: 0;
 }
 
 .elite-modal-close-btn {
   background: transparent;
   border: none;
-  color: #64748b;
+  color: var(--color-on-surface-variant);
   cursor: pointer;
   padding: 6px;
   border-radius: 6px;
@@ -81,14 +53,14 @@
 }
 
 .elite-modal-close-btn:hover {
-  color: #1e293b;
-  background-color: #f1f5f9;
+  color: var(--color-on-surface);
+  background-color: var(--bg-surface-variant);
 }
 
 .elite-modal-body {
   padding: 24px;
   overflow-y: auto;
-  color: #334155;
+  color: var(--color-on-surface);
   font-size: 0.9375rem;
   line-height: 1.6;
 }
@@ -99,8 +71,8 @@
   justify-content: flex-end;
   gap: 12px;
   padding: 16px 24px;
-  background-color: #f8fafc;
-  border-top: 1px solid #f1f5f9;
+  background-color: var(--bg-surface-container);
+  border-top: 1px solid var(--color-outline-variant);
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
 }

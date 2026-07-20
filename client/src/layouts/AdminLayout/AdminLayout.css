@@ -4,7 +4,7 @@
   height: 100dvh;
   width: 100vw;
   overflow: hidden;
-  background-color: #0d1117;
+  background-color: var(--bg-surface-dim);
   font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, monospace;
 }
 
@@ -20,5 +20,5 @@
   flex: 1;
   padding: 2rem;
   overflow-y: auto;
-  background-color: #0d1117;
+  background-color: var(--bg-surface-dim);
 }

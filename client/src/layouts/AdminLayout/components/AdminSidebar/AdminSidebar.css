@@ -1,26 +1,36 @@
 .admin-sidebar {
   width: 280px;
-  background-color: #161b22;
-  border-right: 1px solid #30363d;
+  background-color: var(--bg-surface-low);
+  border-right: 1px solid var(--color-outline-variant);
   display: flex;
   flex-direction: column;
   height: 100%;
+  flex: 0 0 280px;
+  transition: flex-basis 0.2s ease, width 0.2s ease;
+  overflow: hidden;
+}
+
+.admin-sidebar.collapsed {
+  width: 72px;
+  flex-basis: 72px;
 }
 
 .admin-brand-header {
   padding: 1.5rem;
-  border-bottom: 1px solid #30363d;
+  border-bottom: 1px solid var(--color-outline-variant);
   font-size: 1.15rem;
   font-weight: 800;
   letter-spacing: -0.5px;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .tech-logo {
-  color: #f0f6fc;
+  color: var(--color-on-surface);
 }
 
 .tech-logo-highlight {
-  color: #58a6ff;
+  color: var(--color-primary);
 }
 
 .admin-nav-menu {
@@ -36,12 +46,13 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 1rem;
-  color: #8b9bb4;
+  color: var(--color-on-surface-variant);
   text-decoration: none;
   font-size: 0.85rem;
   font-weight: 700;
   border-radius: 6px;
   transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
 .admin-nav-link span.material-symbols-outlined {
@@ -49,25 +60,25 @@
 }
 
 .admin-nav-link:hover {
-  background-color: #21262d;
-  color: #f0f6fc;
+  background-color: var(--bg-surface-variant);
+  color: var(--color-on-surface);
 }
 
 .admin-nav-link.active {
-  background-color: #21262d;
-  color: #58a6ff;
-  border-left: 3px solid #58a6ff;
+  background-color: var(--bg-surface-variant);
+  color: var(--color-primary);
+  border-left: 3px solid var(--color-primary);
   border-radius: 0 6px 6px 0;
 }
 
 .admin-profile-footer {
   padding: 1.25rem;
-  border-top: 1px solid #30363d;
+  border-top: 1px solid var(--color-outline-variant);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  background-color: #0d1117;
+  background-color: var(--bg-surface-lowest);
 }
 
 .admin-meta {
@@ -76,16 +87,36 @@
   overflow: hidden;
 }
 
+.admin-sidebar.collapsed .tech-logo,
+.admin-sidebar.collapsed .tech-logo-highlight,
+.admin-sidebar.collapsed .admin-nav-link span:not(.material-symbols-outlined),
+.admin-sidebar.collapsed .admin-meta {
+  display: none;
+}
+
+.admin-sidebar.collapsed .admin-brand-header,
+.admin-sidebar.collapsed .admin-nav-menu,
+.admin-sidebar.collapsed .admin-profile-footer {
+  align-items: center;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+.admin-sidebar.collapsed .admin-nav-link {
+  justify-content: center;
+  padding: 0.75rem;
+}
+
 .meta-role {
   font-size: 0.65rem;
   font-weight: 800;
-  color: #58a6ff;
+  color: var(--color-primary);
   letter-spacing: 0.5px;
 }
 
 .meta-email {
   font-size: 0.75rem;
-  color: #8b9bb4;
+  color: var(--color-on-surface-variant);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -94,7 +125,7 @@
 .admin-logout-btn {
   background: transparent;
   border: none;
-  color: #f85149;
+  color: var(--color-error);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -105,5 +136,5 @@
 }
 
 .admin-logout-btn:hover {
-  background-color: rgba(248, 81, 73, 0.1);
+  background-color: rgba(255, 180, 171, 0.1);
 }
