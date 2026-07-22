@@ -1,0 +1,60 @@
+.admin-product-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-row-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 576px) {
+  .form-row-3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #4b5563;
+}
+
+.form-input, .form-textarea, .form-select {
+  font-family: inherit;
+  font-size: 0.875rem;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  color: #111827;
+  background-color: #ffffff;
+  width: 100%;
+}
+
+.form-input:focus, .form-textarea:focus, .form-select:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.has-error { border-color: #ef4444 !important; }
+.error-text { color: #ef4444; font-size: 0.75rem; font-weight: 500; }
+.form-file-input { font-size: 0.875rem; color: #4b5563; }
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+}
