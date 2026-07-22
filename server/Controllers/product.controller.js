@@ -9,11 +9,9 @@ import { v2 as cloudinary } from "cloudinary";
 export const createProduct = asyncHandler(async (req, res, next) => {
   const product = req.body;
 
-  const category = await Category.findOne({
-    name: product.category?.toLowerCase(),
-  });
+  const category = await Category.findById(product.categoryId);
   if (!category) {
-    throw new ApiError(`No Category Name Matches: ${product.category}`, 404);
+    throw new ApiError(`No Category Found With This ID: ${product.categoryId}`, 404);
   }
 
   const productData = {
@@ -38,10 +36,6 @@ export const createProduct = asyncHandler(async (req, res, next) => {
 // Get All Products
 export const getAllProducts = asyncHandler(async (req, res, next) => {
   const products = await Product.find().populate("categoryId", "name");
-
-  if (products.length === 0) {
-    throw new ApiError("No products found", 404);
-  }
 
   res
     .status(200)
@@ -95,6 +89,14 @@ export const updateProduct = asyncHandler(async (req, res, next) => {
   if (!product) {
     throw new ApiError(`No Product Found With This ID: ${id}`, 404);
   }
+
+  if (newData.categoryId) {
+    const category = await Category.findById(newData.categoryId);
+    if (!category) {
+      throw new ApiError(`No Category Found With This ID: ${newData.categoryId}`, 404);
+    }
+  }
+
   if (req.file) {
     if (product.image && product.image.includes("cloudinary")) {
       const urlParts = product.image.split("/");

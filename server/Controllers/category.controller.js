@@ -28,10 +28,6 @@ export const createCategory = asyncHandler(async (req, res, next) => {
 // Get All Categories
 export const getCategories = asyncHandler(async (req, res, next) => {
     const allCategories = await Category.find();
-    
-    if (allCategories.length === 0) {
-        throw new ApiError("No categories inserted yet", 404);
-    }
 
     res.status(200).json({
         status: "success",
