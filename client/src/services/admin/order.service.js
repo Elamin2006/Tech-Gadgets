@@ -10,12 +10,21 @@ export const AdminOrderService = {
     }
   },
 
-  updateOrderStatus: async (orderId, updateData) => {
+ getOrderById: async (orderId) => {
     try {
-      const response = await API.patch(`/orders/${orderId}`, updateData);
+      const response = await API.get(`/orders/${orderId}`);
       return response.data;
     } catch (error) {
-      throw error.response?.data || { message: "Failed to update order status" };
+      throw error.response?.data || { message: "Failed to fetch order details" };
+    }
+  },
+
+  updateOrderStatus: async (orderId, updatePayload) => {
+    try {
+      const response = await API.patch(`/orders/${orderId}`, updatePayload);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || { message: "Failed to update order" };
     }
   },
 
