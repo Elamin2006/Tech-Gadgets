@@ -59,7 +59,7 @@ export const getAllOrders = asyncHandler(async (req, res, next) => {
   const filter = req.user?.role === "admin" ? {} : { userId };
 
   const allOrders = await Order.find(filter)
-    .populate("userId", "name email")
+    .populate("userId", "firstName lastName email")
     .sort({ createdAt: -1 });
 
   res.status(200).json({
@@ -72,10 +72,9 @@ export const getAllOrders = asyncHandler(async (req, res, next) => {
 // Get Order By ID
 export const getOrderById = asyncHandler(async (req, res, next) => {
   const { orderId } = req.params;
-  const order = await Order.findById(orderId).populate(
-    "orderItems.productId",
-    "name image",
-  );
+  const order = await Order.findById(orderId)
+    .populate("userId", "firstName lastName email")
+    .populate("orderItems.productId", "name image");
 
   if (!order) {
     throw new ApiError(`No order found with this ID: ${orderId}`, 404);
@@ -126,7 +125,11 @@ export const updateOrderStatus = asyncHandler(async (req, res, next) => {
   }
 
   const updatedOrder = await order.save();
-  res.status(200).json({ status: "success", data: updatedOrder });
+  const populatedOrder = await Order.findById(orderId)
+    .populate("userId", "firstName lastName email")
+    .populate("orderItems.productId", "name image");
+
+  res.status(200).json({ status: "success", data: populatedOrder });
 
   const orderUser = await Order.findById(orderId).populate("userId", "email");
   if (orderUser?.userId?.email) {
