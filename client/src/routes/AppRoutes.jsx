@@ -25,6 +25,7 @@ import Orders from "../pages/Order/Order.jsx";
 import ProtectedRoutes from "./ProtectedRoutes.jsx";
 import CategoryManagement from "../pages/Admin/Categories/CategoryManagement.jsx";
 import ProductManagement from "../pages/Admin/Products/ProductManagement.jsx";
+import OrderManagement from "../pages/Admin/Orders/OrderManagement.jsx";
 
 export default function AppRoutes() {
   const dispatch = useDispatch();
@@ -68,7 +69,7 @@ export default function AppRoutes() {
             <Route path="/admin/users" element={<h1 style={{ color: "#f0f6fc" }}>USER_NODES_LIST</h1>} />
             <Route path="/admin/categories" element={<CategoryManagement />} />
             <Route path="/admin/products" element={<ProductManagement />} />
-            <Route path="/admin/orders" element={<h1 style={{ color: "#f0f6fc" }}>ORDER_TRANSACTIONS</h1>} />
+            <Route path="/admin/orders" element={<OrderManagement />} />
           </Route>
         </Route>
 

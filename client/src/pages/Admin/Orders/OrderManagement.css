@@ -1,0 +1,207 @@
+/* Container Layout */
+.order-management-view {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background: var(
+    --order-page-bg,
+    linear-gradient(
+      180deg,
+      var(--bg-surface-lowest) 0%,
+      var(--bg-surface-dim) 100%
+    )
+  );
+  color: var(--order-text, #dee3e8);
+  min-height: 100vh;
+}
+
+/* Header Section */
+.order-view-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.title-area {
+  display: flex;
+  flex-direction: column;
+}
+
+.orders-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--order-text, #dee3e8);
+  margin: 0;
+}
+
+.orders-subtitle {
+  font-size: 0.875rem;
+  color: var(--order-text-muted, #bdc8d1);
+  margin-top: 0.25rem;
+  display: block;
+}
+
+/* Metrics Grid */
+.orders-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.metric-card {
+  background: var(--order-surface, #171c20);
+  padding: 1.25rem;
+  border-radius: 8px;
+  border: 1px solid var(--order-border, #3e484f);
+  box-shadow: 0 10px 30px rgba(2, 8, 23, 0.28);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.metric-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--order-text-muted, #bdc8d1);
+  font-weight: 600;
+}
+
+.metric-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--order-text, #dee3e8);
+}
+
+.metric-tag {
+  font-size: 0.75rem;
+  color: var(--order-text-muted, #bdc8d1);
+}
+
+.text-highlight {
+  color: var(--color-primary, #8ed5ff);
+}
+
+.text-yellow {
+  color: #fbbf24;
+}
+
+/* Control Panel (Tabs & Search) */
+.orders-control-panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background: var(--order-surface, #171c20);
+  padding: 1rem 1.25rem;
+  border-radius: 8px;
+  border: 1px solid var(--order-border, #3e484f);
+  box-shadow: 0 10px 30px rgba(2, 8, 23, 0.28);
+}
+
+.tab-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.tab-btn {
+  padding: 0.4rem 0.85rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid var(--order-border, #3e484f);
+  background-color: var(--bg-surface-container, #1b2024);
+  color: var(--order-text-muted, #bdc8d1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tab-btn:hover {
+  background-color: var(--order-surface-strong, #303539);
+  color: var(--order-text, #dee3e8);
+}
+
+.tab-btn.active {
+  background-color: var(--order-accent-strong, #38bdf8);
+  color: var(--bg-surface-lowest, #0a0f12);
+  border-color: var(--order-accent-strong, #38bdf8);
+}
+
+.search-box-wrapper {
+  position: relative;
+  min-width: 280px;
+  flex: 1;
+  max-width: 400px;
+}
+
+.search-field-icon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--order-text-muted, #bdc8d1);
+  font-size: 1.125rem;
+  pointer-events: none;
+}
+
+.orders-search-input {
+  width: 100%;
+  padding: 0.5rem 0.75rem 0.5rem 2.5rem;
+  border: 1px solid var(--order-border, #3e484f);
+  border-radius: 6px;
+  font-size: 0.875rem;
+  background-color: var(--bg-surface-low, #171c20);
+  color: var(--order-text, #dee3e8);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.orders-search-input::placeholder {
+  color: var(--order-text-muted, #bdc8d1);
+}
+
+.orders-search-input:focus {
+  outline: none;
+  border-color: var(--order-accent, #8ed5ff);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+}
+
+/* Loading & Error States */
+.order-management-loading,
+.order-management-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 1rem;
+  text-align: center;
+  background: var(--order-surface, #171c20);
+  border-radius: 8px;
+  border: 1px solid var(--order-border, #3e484f);
+  color: var(--order-text, #dee3e8);
+}
+
+.error-icon {
+  font-size: 2.5rem;
+  color: var(--color-primary, #8ed5ff);
+  margin-bottom: 0.5rem;
+}
+
+.error-title {
+  font-size: 1.125rem;
+  color: var(--order-text, #dee3e8);
+  margin-bottom: 0.25rem;
+}
+
+.error-desc {
+  color: var(--order-text-muted, #bdc8d1);
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
