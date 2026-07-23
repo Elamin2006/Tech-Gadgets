@@ -1,0 +1,266 @@
+/* ==========================================================================
+   Admin Order Table Theme
+   ========================================================================== */
+:root {
+  --admin-order-table-bg: var(--order-surface, #171c20);
+  --admin-order-table-header: var(--bg-surface-lowest, #0a0f12);
+  --admin-order-table-hover: var(--order-surface-strong, #303539);
+  --admin-order-table-border: var(--order-border, #3e484f);
+  --admin-order-text-primary: var(--order-text, #dee3e8);
+  --admin-order-text-secondary: var(--order-text-muted, #bdc8d1);
+  --admin-order-text-muted: var(--color-on-surface-variant, #bdc8d1);
+  --accent-cyan: var(--color-primary, #8ed5ff);
+  --accent-emerald: #22c55e;
+  --accent-amber: #fbbf24;
+  --accent-rose: #f87171;
+}
+
+/* Wrapper & Container */
+.dark-order-table-container {
+  width: 100%;
+  background-color: var(--admin-order-table-bg);
+  border: 1px solid var(--admin-order-table-border);
+  border-radius: 12px;
+  overflow-x: auto;
+  box-shadow: 0 16px 32px -8px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(12px);
+}
+
+.dark-order-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  text-align: left;
+  font-size: 0.875rem;
+  color: var(--admin-order-text-primary);
+}
+
+/* Table Header */
+.dark-order-table thead tr {
+  background-color: var(--admin-order-table-header);
+}
+
+.dark-order-table th {
+  padding: 1rem 1.25rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--admin-order-text-secondary);
+  border-bottom: 1px solid var(--admin-order-table-border);
+  white-space: nowrap;
+}
+
+.dark-order-table th.actions-header {
+  text-align: right;
+}
+
+/* Table Body Rows */
+.dark-table-row {
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.dark-table-row:hover {
+  background-color: var(--admin-order-table-hover);
+}
+
+.dark-order-table td {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--admin-order-table-border);
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.dark-table-row:last-child td {
+  border-bottom: none;
+}
+
+/* Order ID Interactive Link */
+.order-id-link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--accent-cyan);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  transition:
+    color 0.2s ease,
+    text-shadow 0.2s ease;
+}
+
+.order-id-link:hover {
+  color: #7dd3fc;
+  text-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
+}
+
+/* Customer Cell */
+.customer-info-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.customer-name {
+  color: var(--admin-order-text-primary);
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.customer-email {
+  font-size: 0.75rem;
+  color: var(--admin-order-text-secondary);
+}
+
+.city-cell {
+  color: var(--admin-order-text-secondary);
+}
+
+.text-muted {
+  color: var(--admin-order-text-muted);
+  font-size: 0.8125rem;
+}
+
+.text-price {
+  color: var(--accent-emerald);
+  font-weight: 700;
+  font-size: 0.9375rem;
+  text-shadow: 0 0 10px rgba(34, 197, 94, 0.2);
+}
+
+.payment-method-tag {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--admin-order-table-border);
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--admin-order-text-secondary);
+}
+
+/* Dark Pills (Paid / Delivered) */
+.dark-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.pill-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.pill-paid,
+.pill-delivered {
+  background-color: rgba(34, 197, 94, 0.14);
+  color: #4ade80;
+  border: 1px solid rgba(74, 222, 128, 0.25);
+}
+
+.pill-paid .pill-dot,
+.pill-delivered .pill-dot {
+  background-color: #4ade80;
+  box-shadow: 0 0 6px #4ade80;
+}
+
+.pill-unpaid,
+.pill-pending {
+  background-color: rgba(148, 163, 184, 0.12);
+  color: var(--admin-order-text-secondary);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+}
+
+.pill-unpaid .pill-dot,
+.pill-pending .pill-dot {
+  background-color: var(--admin-order-text-muted);
+}
+
+/* Status Badges */
+.dark-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.badge-glow-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+/* Completed */
+.dark-badge-completed {
+  background-color: rgba(34, 197, 94, 0.16);
+  color: #4ade80;
+  border: 1px solid rgba(74, 222, 128, 0.3);
+}
+
+.dark-badge-completed .badge-glow-dot {
+  background-color: #4ade80;
+  box-shadow: 0 0 8px #4ade80;
+}
+
+/* Pending */
+.dark-badge-pending {
+  background-color: rgba(251, 191, 36, 0.16);
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.dark-badge-pending .badge-glow-dot {
+  background-color: #fbbf24;
+  box-shadow: 0 0 8px #fbbf24;
+}
+
+/* Canceled */
+.dark-badge-canceled {
+  background-color: rgba(248, 113, 113, 0.16);
+  color: #f87171;
+  border: 1px solid rgba(248, 113, 113, 0.3);
+}
+
+.dark-badge-canceled .badge-glow-dot {
+  background-color: #f87171;
+  box-shadow: 0 0 8px #f87171;
+}
+
+/* Actions Cell */
+.order-actions-cell {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+/* Empty State */
+.dark-table-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  background-color: var(--admin-order-table-bg);
+  border: 1px solid var(--admin-order-table-border);
+  border-radius: 12px;
+  color: var(--admin-order-text-secondary);
+}
+
+.empty-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.75rem;
+}
