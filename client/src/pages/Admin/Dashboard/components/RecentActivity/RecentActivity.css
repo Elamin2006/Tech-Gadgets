@@ -1,0 +1,173 @@
+.activity-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.activity-card {
+  background-color: var(--bg-surface-low);
+  border: 1px solid var(--color-outline-variant);
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.activity-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 0.875rem;
+  border-bottom: 1px solid var(--color-outline-variant);
+  margin-bottom: 0.875rem;
+}
+
+.header-title-box {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.header-title-box h3 {
+  font-family: 'Sora', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-on-surface);
+  margin: 0;
+}
+
+.header-icon {
+  font-size: 1.125rem;
+}
+
+.text-blue {
+  color: var(--color-primary);
+}
+
+.text-purple {
+  color: var(--color-secondary);
+}
+
+.activity-badge {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  background-color: var(--bg-surface-container);
+  color: var(--color-on-surface-variant);
+  border: 1px solid var(--color-outline-variant);
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.no-activity {
+  text-align: center;
+  color: var(--color-on-surface-variant);
+  font-size: 0.875rem;
+  padding: 1.5rem 0;
+}
+
+.activity-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px dashed var(--color-outline-variant);
+}
+
+.activity-item:last-child {
+  border-bottom: none;
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: var(--bg-surface-container);
+  color: var(--color-primary);
+  border: 1px solid var(--color-outline-variant);
+  font-family: 'Sora', sans-serif;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  margin-right: 0.75rem;
+}
+
+.item-main {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.item-id {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-on-surface);
+}
+
+.item-sub {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  color: var(--color-on-surface-variant);
+}
+
+.item-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+}
+
+.item-amount {
+  font-family: 'Sora', sans-serif;
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: var(--color-primary);
+}
+
+/* Dark Theme Status Badges */
+.status-pill {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.status-pending {
+  background-color: rgba(241, 160, 43, 0.15);
+  color: var(--color-tertiary-container);
+  border: 1px solid rgba(241, 160, 43, 0.3);
+}
+
+.status-completed {
+  background-color: rgba(74, 222, 128, 0.15);
+  color: #4ade80;
+  border: 1px solid rgba(74, 222, 128, 0.3);
+}
+
+.status-canceled {
+  background-color: rgba(255, 180, 171, 0.15);
+  color: var(--color-error);
+  border: 1px solid rgba(255, 180, 171, 0.3);
+}
+
+.role-tag {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  background-color: rgba(185, 200, 222, 0.15);
+  color: var(--color-secondary);
+  border: 1px solid rgba(185, 200, 222, 0.3);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
