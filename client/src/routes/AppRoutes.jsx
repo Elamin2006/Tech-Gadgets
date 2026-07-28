@@ -27,6 +27,7 @@ import CategoryManagement from "../pages/Admin/Categories/CategoryManagement.jsx
 import ProductManagement from "../pages/Admin/Products/ProductManagement.jsx";
 import OrderManagement from "../pages/Admin/Orders/OrderManagement.jsx";
 import AdminDashboard from "../pages/Admin/Dashboard/AdminDashboard.jsx"
+import UserManagement from "../pages/Admin/Users/UserManagement.jsx";
 export default function AppRoutes() {
   const dispatch = useDispatch();
 
@@ -66,7 +67,7 @@ export default function AppRoutes() {
         <Route element={<AdminRoute />}>
           <Route element={<AdminLayout />}>
             <Route path="/admin/dashboard" element={<AdminDashboard/>}/>
-            <Route path="/admin/users" element={<h1 style={{ color: "#f0f6fc" }}>USER_NODES_LIST</h1>} />
+            <Route path="/admin/users" element={<UserManagement />} />
             <Route path="/admin/categories" element={<CategoryManagement />} />
             <Route path="/admin/products" element={<ProductManagement />} />
             <Route path="/admin/orders" element={<OrderManagement />} />
