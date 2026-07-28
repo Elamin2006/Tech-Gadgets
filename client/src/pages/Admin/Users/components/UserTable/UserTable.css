@@ -1,0 +1,155 @@
+.user-table-wrapper {
+  background-color: var(--bg-surface-low);
+  border: 1px solid var(--color-outline-variant);
+  border-radius: 12px;
+  overflow-x: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.user-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.user-data-table th {
+  background-color: var(--bg-surface-container);
+  color: var(--color-on-surface-variant);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 1rem 1.25rem;
+  font-weight: 600;
+  border-bottom: 1px solid var(--color-outline-variant);
+}
+
+.user-data-table td {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--color-outline-variant);
+  font-size: 0.875rem;
+  vertical-align: middle;
+}
+
+.user-data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.row-suspended {
+  opacity: 0.65;
+  background-color: rgba(15, 20, 24, 0.4);
+}
+
+.user-identity-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.user-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background-color: var(--color-secondary-container);
+  color: var(--color-on-secondary-container);
+  font-weight: 700;
+  font-family: 'Sora', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.identity-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-weight: 600;
+  color: var(--color-on-surface);
+}
+
+.user-email {
+  font-size: 0.75rem;
+  color: var(--color-on-surface-variant);
+}
+
+.role-inline-select {
+  padding: 0.35rem 0.65rem;
+  background-color: var(--bg-surface-container);
+  border: 1px solid var(--color-outline-variant);
+  border-radius: 6px;
+  color: var(--color-on-surface);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+}
+
+.role-inline-select:focus {
+  border-color: var(--color-primary-container);
+}
+
+.status-pill {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.status-active {
+  background-color: rgba(56, 189, 248, 0.15);
+  color: var(--color-primary);
+}
+
+.status-suspended {
+  background-color: var(--color-error-container);
+  color: var(--color-error);
+}
+
+.date-cell {
+  color: var(--color-on-surface-variant);
+  font-size: 0.8125rem;
+}
+
+.actions-cell {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.35rem;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.btn-ban:hover {
+  color: var(--color-tertiary-container);
+}
+
+.btn-unban:hover {
+  color: var(--color-primary);
+}
+
+.btn-danger-action:hover {
+  color: var(--color-error);
+}
+
+.user-table-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 1rem;
+  background-color: var(--bg-surface-low);
+  border: 1px solid var(--color-outline-variant);
+  border-radius: 12px;
+  color: var(--color-on-surface-variant);
+}
+
+.empty-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
