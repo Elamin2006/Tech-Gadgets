@@ -1,0 +1,137 @@
+.user-details-modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  color: var(--color-on-surface);
+}
+
+.user-details-loading,
+.user-details-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+}
+
+.user-modal-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.modal-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: var(--color-secondary-container);
+  color: var(--color-on-secondary-container);
+  font-family: 'Sora', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-header-info h3 {
+  font-family: 'Sora', sans-serif;
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.modal-header-info p {
+  margin: 0.2rem 0 0.5rem 0;
+  color: var(--color-on-surface-variant);
+  font-size: 0.875rem;
+}
+
+.badges-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.role-tag-pill {
+  font-size: 0.75rem;
+  background-color: var(--bg-surface-container);
+  border: 1px solid var(--color-outline-variant);
+  color: var(--color-secondary);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.modal-divider {
+  border: none;
+  border-top: 1px solid var(--color-outline-variant);
+  margin: 0;
+}
+
+.user-details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  background-color: var(--bg-surface-container);
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--color-outline-variant);
+}
+
+.detail-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.detail-field label {
+  font-size: 0.75rem;
+  color: var(--color-on-surface-variant);
+  text-transform: uppercase;
+}
+
+.detail-field span {
+  font-size: 0.875rem;
+  font-weight: 600;
+  word-break: break-all;
+}
+
+.user-modal-actions-box h4 {
+  margin: 0 0 1rem 0;
+  font-family: 'Sora', sans-serif;
+  font-size: 1rem;
+}
+
+.role-control-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.role-select-box {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.role-select-box select {
+  padding: 0.4rem 0.75rem;
+  background-color: var(--bg-surface-container);
+  border: 1px solid var(--color-outline-variant);
+  border-radius: 6px;
+  color: var(--color-on-surface);
+  font-size: 0.875rem;
+}
+
+.status-control-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.875rem;
+}
