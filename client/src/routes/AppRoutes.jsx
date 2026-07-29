@@ -1,89 +1,92 @@
-import React, { useEffect } from "react";
+import React, { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { fetchCart } from "../store/slices/cartSlice";
-import { ToastContainer } from "react-toastify";
 
-// Layout Wrapper
+// Layouts
 import MainLayout from "../layouts/MainLayout";
-
-// Admin Components
-import AdminRoute from "./AdminRoute.jsx";
 import AdminLayout from "../layouts/AdminLayout/AdminLayout.jsx";
 
-// Views / Pages
-import Home from "../pages/Home.jsx";
-import Login from "../pages/Login/Login.jsx";
-import ForgotPassword from "../pages/ForgotPassword/ForgotPassword.jsx";
-import VerifyResetCode from "../pages/VerifyResetCode/VerifyResetCode.jsx";
-import ResetPassword from "../pages/ResetPassword/ResetPassword.jsx";
-import Cart from "../pages/Cart/Cart.jsx";
-import Register from "../pages/Register/Register";
-import Shop from "../pages/Shop/Shop";
-import Product from "../pages/Product/Product.jsx";
-import Orders from "../pages/Order/Order.jsx";
+// Route Guards
 import ProtectedRoutes from "./ProtectedRoutes.jsx";
-import CategoryManagement from "../pages/Admin/Categories/CategoryManagement.jsx";
-import ProductManagement from "../pages/Admin/Products/ProductManagement.jsx";
-import OrderManagement from "../pages/Admin/Orders/OrderManagement.jsx";
-import AdminDashboard from "../pages/Admin/Dashboard/AdminDashboard.jsx"
-import UserManagement from "../pages/Admin/Users/UserManagement.jsx";
+import AdminRoute from "./AdminRoute.jsx";
+
+// Shared UI (reusing the common)
+import Loader from "../components/common/Loader/Loader";
+
+// Lazy-loaded Public & User Views
+const Home = lazy(() => import("../pages/Home.jsx"));
+const Shop = lazy(() => import("../pages/Shop/Shop"));
+const Product = lazy(() => import("../pages/Product/Product.jsx"));
+const Cart = lazy(() => import("../pages/Cart/Cart.jsx"));
+const Orders = lazy(() => import("../pages/Order/Order.jsx"));
+
+// Lazy-loaded Auth Views
+const Login = lazy(() => import("../pages/Login/Login.jsx"));
+const Register = lazy(() => import("../pages/Register/Register"));
+const ForgotPassword = lazy(() => import("../pages/ForgotPassword/ForgotPassword.jsx"));
+const VerifyResetCode = lazy(() => import("../pages/VerifyResetCode/VerifyResetCode.jsx"));
+const ResetPassword = lazy(() => import("../pages/ResetPassword/ResetPassword.jsx"));
+
+// Lazy-loaded Admin Views
+const AdminDashboard = lazy(() => import("../pages/Admin/Dashboard/AdminDashboard.jsx"));
+const UserManagement = lazy(() => import("../pages/Admin/Users/UserManagement.jsx"));
+const CategoryManagement = lazy(() => import("../pages/Admin/Categories/CategoryManagement.jsx"));
+const ProductManagement = lazy(() => import("../pages/Admin/Products/ProductManagement.jsx"));
+const OrderManagement = lazy(() => import("../pages/Admin/Orders/OrderManagement.jsx"));
+
+// Fallback shown during lazy chunk loading, reuses the common Loader
+const PageLoader = () => (
+  <div className="d-flex align-items-center justify-content-center min-vh-100">
+    <Loader message="Loading page..." size="lg" />
+  </div>
+);
+
 export default function AppRoutes() {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      dispatch(fetchCart());
-    }
-  }, [dispatch]);
-
   return (
     <Router>
-      <ToastContainer theme="dark" toastClassName="elite-toast" />
+      <Suspense fallback={<PageLoader />}>
+        <Routes>
+          {/* Main Layout Routes (With Navbar / Footer) */}
+          <Route element={<MainLayout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/shop" element={<Shop />} />
+            <Route path="/product/:id" element={<Product />} />
 
-      <Routes>
-        {/* Main Layout Routes With Navbar / Footer */}
-        <Route element={<MainLayout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/shop" element={<Shop />} />
-          <Route path="/product/:id" element={<Product />} />
-
-          {/* Protected routes for authenticated users */}
-          <Route element={<ProtectedRoutes />}>
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/orders" element={<Orders />} />
+            {/* Protected User Routes */}
+            <Route element={<ProtectedRoutes />}>
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/orders" element={<Orders />} />
+            </Route>
           </Route>
-        </Route>
 
-        {/* Login and Register pages are isolated from the main layout */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/verify-reset-code" element={<VerifyResetCode />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
+          {/* Standalone Auth Routes */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/verify-reset-code" element={<VerifyResetCode />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
 
-        {/* Protected Admin Portal Route Hierarchy */}
-        <Route element={<AdminRoute />}>
-          <Route element={<AdminLayout />}>
-            <Route path="/admin/dashboard" element={<AdminDashboard/>}/>
-            <Route path="/admin/users" element={<UserManagement />} />
-            <Route path="/admin/categories" element={<CategoryManagement />} />
-            <Route path="/admin/products" element={<ProductManagement />} />
-            <Route path="/admin/orders" element={<OrderManagement />} />
+          {/* Protected Admin Portal Hierarchy */}
+          <Route element={<AdminRoute />}>
+            <Route element={<AdminLayout />}>
+              <Route path="/admin/dashboard" element={<AdminDashboard />} />
+              <Route path="/admin/users" element={<UserManagement />} />
+              <Route path="/admin/categories" element={<CategoryManagement />} />
+              <Route path="/admin/products" element={<ProductManagement />} />
+              <Route path="/admin/orders" element={<OrderManagement />} />
+            </Route>
           </Route>
-        </Route>
 
-        {/* Catch all not found routes */}
-        <Route
-          path="*"
-          element={
-            <main className="d-flex align-items-center justify-content-center min-vh-100">
-              <h2 className="text-center">404 - Page Not Found</h2>
-            </main>
-          }
-        />
-      </Routes>
+          {/* Catch-all 404 Route */}
+          <Route
+            path="*"
+            element={
+              <main className="d-flex align-items-center justify-content-center min-vh-100">
+                <h2 className="text-center">404 - Page Not Found</h2>
+              </main>
+            }
+          />
+        </Routes>
+      </Suspense>
     </Router>
   );
 }
