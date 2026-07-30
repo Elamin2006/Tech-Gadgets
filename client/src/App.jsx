@@ -5,9 +5,12 @@ import { fetchCart } from "./store/slices/cartSlice";
 import { AuthService } from "./services/auth.service";
 import AppRoutes from "./routes/AppRoutes";
 
+
+const selectUser = (state) => state.auth.user;
+
 export default function App() {
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.auth);
+  const user = useSelector(selectUser);
 
   useEffect(() => {
     const isAdmin = user?.role === "admin";

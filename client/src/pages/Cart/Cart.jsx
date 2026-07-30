@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Col, Container, Row, Spinner, Form, Alert } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { CartService } from "../../services/customer/cart.service.js";
-import { fetchCart, clearUserCart } from "../../store/slices/cartSlice";
+import { updateItemQuantity, removeItemFromCart, fetchCart, clearUserCart } from "../../store/slices/cartSlice";
 import OrderService from "../../services/customer/order.service";
 import "./Cart.css";
 
@@ -82,57 +82,49 @@ const Cart = () => {
       setIsSubmitting(false);
     }
   };
-  const getProductId = (item) =>
-    item?.productId?._id || item?.productId || item?.product?._id || null;
+  const fetchLatestCart = useCallback(() => dispatch(fetchCart()), [dispatch]);
 
-  const getProductImage = (item) => {
+  // useMemo: helper extractors avoid inline function recreation in render
+  const getProductId = useCallback(
+    (item) => item?.productId?._id || item?.productId || item?.product?._id || null,
+    []
+  );
+
+  const getProductImage = useCallback((item) => {
     if (item?.productId && typeof item.productId === "object") {
       return item.productId.image || item.image || item.product?.image || null;
     }
     return item.image || item.product?.image || null;
-  };
+  }, []);
 
-  const getProductName = (item) => {
+  const getProductName = useCallback((item) => {
     if (item?.productId && typeof item.productId === "object") {
       return item.productId.name || item.name || item.product?.name || null;
     }
     return item.name || item.product?.name || null;
-  };
+  }, []);
 
-  const fetchLatestCart = () => dispatch(fetchCart());
-
-  const handleIncrement = async (item) => {
-    const itemId = item._id;
-    if (!itemId) return;
-
-    try {
-      await CartService.updateCartItemQuantity(itemId, item.quantity + 1);
-      fetchLatestCart();
-    } catch (error) {
-      console.error("Cart increment failed", error);
-    }
-  };
-
-  const handleDecrement = async (item) => {
-    const itemId = item._id;
-    if (!itemId) return;
-
+ 
+const handleIncrement = useCallback(
+  (item) => {
+    if (!item._id) return;
+    dispatch(updateItemQuantity({ itemId: item._id, quantity: item.quantity + 1 }));
+  },
+  [dispatch]
+);
+ 
+const handleDecrement = useCallback(
+  (item) => {
+    if (!item._id) return;
+ 
     if (item.quantity > 1) {
-      try {
-        await CartService.updateCartItemQuantity(itemId, item.quantity - 1);
-        fetchLatestCart();
-      } catch (error) {
-        console.error("Cart decrement failed", error);
-      }
+      dispatch(updateItemQuantity({ itemId: item._id, quantity: item.quantity - 1 }));
     } else {
-      try {
-        await CartService.removeFromCart(itemId);
-        fetchLatestCart();
-      } catch (error) {
-        console.error("Cart decrement failed", error);
-      }
+      dispatch(removeItemFromCart(item._id));
     }
-  };
+  },
+  [dispatch]
+);
 
   if (isLoading && cartItems.length === 0) {
     return (
@@ -170,7 +162,6 @@ const Cart = () => {
                   key={item._id}
                 >
                   <Row className="align-items-center">
-                    {/* الصورة */}
                     <Col className="image-holder" xs={4} sm={4} md={3}>
                       <img
                         src={productImg}
