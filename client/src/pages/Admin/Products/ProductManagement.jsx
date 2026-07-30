@@ -1,5 +1,6 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import useProducts from "./hooks/useProducts";
+import useDebounce from "../../../hooks/useDebounce";
 import ProductTable from "./components/ProductTable/ProductTable";
 import ProductForm from "./components/ProductForm/ProductForm";
 import Modal from "../../../components/common/Modal/Modal";
@@ -25,6 +26,8 @@ export default function ProductManagement() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
 
+  const debouncedSearchQuery = useDebounce(searchQuery, 300);
+
   // Modal & Edit State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
@@ -35,32 +38,38 @@ export default function ProductManagement() {
   const [productToDelete, setProductToDelete] = useState(null);
   const [deleteSubmitting, setDeleteSubmitting] = useState(false);
 
-  // Filtered Products List
+  // Filtered Products List — depends on debounced query, not raw input
   const filteredProducts = useMemo(() => {
     return products.filter((p) => {
-      const matchesSearch = p.name?.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesSearch = p.name?.toLowerCase().includes(debouncedSearchQuery.toLowerCase());
       const pCatId = typeof p.categoryId === "object" ? p.categoryId?._id : p.categoryId;
       const matchesCategory = selectedCategory === "" || pCatId === selectedCategory;
       return matchesSearch && matchesCategory;
     });
-  }, [products, searchQuery, selectedCategory]);
+  }, [products, debouncedSearchQuery, selectedCategory]);
 
-  const handleOpenAddModal = () => {
+  
+  const handleOpenAddModal = useCallback(() => {
     setEditingProduct(null);
     setIsModalOpen(true);
-  };
+  }, []);
 
-  const handleOpenEditModal = (product) => {
+  const handleOpenEditModal = useCallback((product) => {
     setEditingProduct(product);
     setIsModalOpen(true);
-  };
+  }, []);
 
-  const handleOpenDeleteDialog = (product) => {
+  const handleOpenDeleteDialog = useCallback((product) => {
     setProductToDelete(product);
     setIsConfirmOpen(true);
-  };
+  }, []);
 
-  const handleFormSubmit = async (formData) => {
+  const handleCloseModal = useCallback(() => {
+    setIsModalOpen(false);
+    setEditingProduct(null);
+  }, []);
+
+  const handleFormSubmit = useCallback(async (formData) => {
     setFormSubmitting(true);
     try {
       if (editingProduct) {
@@ -78,9 +87,9 @@ export default function ProductManagement() {
     } finally {
       setFormSubmitting(false);
     }
-  };
+  }, [editingProduct, updateProduct, createProduct]);
 
-  const handleDeleteConfirm = async () => {
+  const handleDeleteConfirm = useCallback(async () => {
     if (!productToDelete) return;
     setDeleteSubmitting(true);
     try {
@@ -94,7 +103,7 @@ export default function ProductManagement() {
     } finally {
       setDeleteSubmitting(false);
     }
-  };
+  }, [productToDelete, deleteProduct]);
 
   if (loading) {
     return (
@@ -173,10 +182,7 @@ export default function ProductManagement() {
       {/* Add / Edit Modal */}
       <Modal
         isOpen={isModalOpen}
-        onClose={() => {
-          setIsModalOpen(false);
-          setEditingProduct(null);
-        }}
+        onClose={handleCloseModal}
         title={editingProduct ? "Edit Product" : "Add New Product"}
         size="md"
       >
@@ -184,10 +190,7 @@ export default function ProductManagement() {
           categories={categories}
           initialData={editingProduct}
           onSubmit={handleFormSubmit}
-          onCancel={() => {
-            setIsModalOpen(false);
-            setEditingProduct(null);
-          }}
+          onCancel={handleCloseModal}
           loading={formSubmitting}
         />
       </Modal>

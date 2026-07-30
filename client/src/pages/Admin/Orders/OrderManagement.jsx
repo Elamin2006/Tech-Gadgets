@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useCallback } from "react";
 import useOrders from "./hooks/useAdminOrders";
+import useDebounce from "../../../hooks/useDebounce";
 import OrderTable from "./components/OrderTable/OrderTable";
 import OrderDetailsModal from "./components/OrderDetailsModal/OrderDetailsModal";
 import Modal from "../../../components/common/Modal/Modal";
@@ -32,6 +33,8 @@ export default function OrderManagement() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("all");
 
+  const debouncedSearchQuery = useDebounce(searchQuery, 300);
+
   // Detail Modal State
   const [selectedOrderId, setSelectedOrderId] = useState(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
@@ -41,7 +44,7 @@ export default function OrderManagement() {
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [deleteSubmitting, setDeleteSubmitting] = useState(false);
 
-  // Filtered orders list - Safely checks both userId and fallback user
+  // Filtered orders list — depends on debounced query, not raw keystrokes
   const filteredOrders = useMemo(() => {
     return orders.filter((order) => {
       // 1. Tab Filter
@@ -51,7 +54,7 @@ export default function OrderManagement() {
       }
 
       // 2. Search Filter — Order ID, customer name/email, phone, or city
-      const search = searchQuery.toLowerCase().trim();
+      const search = debouncedSearchQuery.toLowerCase().trim();
       if (!search) return true;
 
       const customerObj = order.userId || order.user; // Handles populated backend object
@@ -63,7 +66,7 @@ export default function OrderManagement() {
 
       return idMatch || nameMatch || emailMatch || phoneMatch || cityMatch;
     });
-  }, [orders, activeTab, searchQuery]);
+  }, [orders, activeTab, debouncedSearchQuery]);
 
   // Metric aggregates
   const metrics = useMemo(() => {
@@ -86,9 +89,11 @@ export default function OrderManagement() {
     setIsDetailOpen(true);
   }, []);
 
-  // Direct status update handler (called from OrderTable or OrderDetails)
-  const handleStatusChange = (orderId, updatePayload) =>
-    updateOrderStatus(orderId, updatePayload);
+  
+  const handleStatusChange = useCallback(
+    (orderId, updatePayload) => updateOrderStatus(orderId, updatePayload),
+    [updateOrderStatus]
+  );
 
   // Delete confirmation handlers
   const handleDeleteClick = useCallback((order) => {

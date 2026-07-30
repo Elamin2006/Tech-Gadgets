@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect, useCallback, useMemo, Fragment } from "react";
 import { Container, Row, Col, Spinner, Alert } from "react-bootstrap";
 import API from "../../services/api";
 
@@ -11,9 +11,11 @@ import "./Shop.css";
 
 const Shop = () => {
   const [products, setProducts] = useState([]);
-  const [filterList, setFilterList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [apiError, setApiError] = useState(null);
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   useWindowScrollToTop();
 
@@ -27,7 +29,6 @@ const Shop = () => {
         const fetchedData = response.data?.data || response.data || [];
 
         setProducts(fetchedData);
-        setFilterList(fetchedData);
         setApiError(null);
       } catch (error) {
         console.error("Error backing up inventory:", error);
@@ -40,6 +41,37 @@ const Shop = () => {
     fetchLiveProducts();
   }, []);
 
+  
+  const filteredProducts = useMemo(() => {
+    let result = products;
+
+    if (searchTerm) {
+      const lower = searchTerm.toLowerCase();
+      result = result.filter((item) =>
+        (item.name || item.title || "").toLowerCase().includes(lower)
+      );
+    }
+
+    if (selectedCategory) {
+      result = result.filter(
+        (item) =>
+          item.category === selectedCategory ||
+          item.categoryId?.name === selectedCategory
+      );
+    }
+
+    return result;
+  }, [products, searchTerm, selectedCategory]);
+
+  
+  const handleSearch = useCallback((term) => {
+    setSearchTerm(term);
+  }, []);
+
+  const handleCategoryChange = useCallback((category) => {
+    setSelectedCategory(category);
+  }, []);
+
   return (
     <Fragment>
       <Banner title="Elite Hardware Grid" />
@@ -49,13 +81,10 @@ const Shop = () => {
           <Container>
             <Row className="justify-content-center g-3">
               <Col md={4} xs={12} className="order-2 order-md-1">
-                <FilterSelect
-                  products={products}
-                  setFilterList={setFilterList}
-                />
+                <FilterSelect onCategoryChange={handleCategoryChange} />
               </Col>
               <Col md={8} xs={12} className="order-1 order-md-2">
-                <SearchBar products={products} setFilterList={setFilterList} />
+                <SearchBar onSearch={handleSearch} />
               </Col>
             </Row>
           </Container>
@@ -78,7 +107,7 @@ const Shop = () => {
             </Alert>
           ) : (
             
-            <ShopList productItems={filterList} />
+            <ShopList productItems={filteredProducts} />
           )}
         </Container>
       </section>

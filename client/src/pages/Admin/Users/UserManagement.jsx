@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useCallback } from "react";
 import useUsers from "./hooks/useUsers";
+import useDebounce from "../../../hooks/useDebounce";
 import UserTable from "./components/UserTable/UserTable";
 import UserDetailsModal from "./components/UserDetailsModal/UserDetailsModal";
 import Modal from "../../../components/common/Modal/Modal";
@@ -33,6 +34,8 @@ export default function UserManagement() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("all");
 
+  const debouncedSearchQuery = useDebounce(searchQuery, 300);
+
   // Detail Modal State
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
@@ -42,7 +45,7 @@ export default function UserManagement() {
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [deleteSubmitting, setDeleteSubmitting] = useState(false);
 
-  // Filtered users list
+  // Filtered users list — depends on debounced query, not raw keystrokes
   const filteredUsers = useMemo(() => {
     return users.filter((user) => {
       // 1. Tab Filter
@@ -51,7 +54,7 @@ export default function UserManagement() {
       if (activeTab === "suspended" && !user.isBanned) return false;
 
       // 2. Search Filter — User ID, name, or email
-      const search = searchQuery.toLowerCase().trim();
+      const search = debouncedSearchQuery.toLowerCase().trim();
       if (!search) return true;
 
       const fullName = `${user.firstName || ""} ${user.lastName || ""}`.toLowerCase();
@@ -61,7 +64,7 @@ export default function UserManagement() {
 
       return idMatch || nameMatch || emailMatch;
     });
-  }, [users, activeTab, searchQuery]);
+  }, [users, activeTab, debouncedSearchQuery]);
 
   // Metrics aggregates
   const metrics = useMemo(() => {
