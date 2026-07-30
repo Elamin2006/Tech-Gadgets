@@ -1,9 +1,10 @@
-import React from "react";
+import React, { memo } from "react";
 import { Row, Col } from "react-bootstrap";
 import ProductCard from "../ProductCard/ProductCard";
 import "./ShopList.css";
 
-export default function ShopList({ productItems }) {
+// memo: prevents re-renders when the parent re-renders but productItems hasn't changed
+const ShopList = memo(function ShopList({ productItems }) {
   if (productItems.length === 0) {
     return (
       <Col xs={12} className="text-center py-5 empty-list-container">
@@ -24,4 +25,6 @@ export default function ShopList({ productItems }) {
       ))}
     </Row>
   );
-}
+});
+
+export default ShopList;

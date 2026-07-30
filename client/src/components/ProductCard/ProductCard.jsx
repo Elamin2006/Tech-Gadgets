@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo, useCallback, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addItemToCart } from "../../store/slices/cartSlice";
@@ -6,24 +6,35 @@ import { toast } from "react-toastify";
 
 import "./ProductCard.css";
 
-export default function ProductCard({ product }) {
+
+const ProductCard = memo(function ProductCard({ product }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const imageUrl =
-    product.image || "https://placehold.co/600x400/171c20/dee3e8?text=No+Image";
+  const { imageUrl, title, description, hasDiscount, originalPrice, discountedPrice } =
+    useMemo(() => {
+      const img =
+        product.image || "https://placehold.co/600x400/171c20/dee3e8?text=No+Image";
+      const name = product.name || "Tactical Hardware";
+      const desc =
+        product.description || "No specifications provided for this elite item.";
+      const discount = product.discount > 0;
+      const price = product.price || 0;
+      const finalPrice = discount
+        ? price - price * (product.discount / 100)
+        : price;
+      return {
+        imageUrl: img,
+        title: name,
+        description: desc,
+        hasDiscount: discount,
+        originalPrice: price,
+        discountedPrice: finalPrice,
+      };
+    }, [product]);
 
-  const title = product.name || "Tactical Hardware";
-  const description =
-    product.description || "No specifications provided for this elite item.";
-
-  const hasDiscount = product.discount > 0;
-  const originalPrice = product.price || 0;
-  const discountedPrice = hasDiscount
-    ? originalPrice - originalPrice * (product.discount / 100)
-    : originalPrice;
-
-  const handleAddToCart = () => {
+  // useCallback: stable function reference — prevents re-render of button children
+  const handleAddToCart = useCallback(() => {
     const token = localStorage.getItem("token");
 
     if (!token) {
@@ -32,9 +43,8 @@ export default function ProductCard({ product }) {
       return;
     }
     toast.success("Product has been added to cart!");
-
     dispatch(addItemToCart({ productId: product._id, quantity: 1 }));
-  };
+  }, [dispatch, navigate, product._id]);
 
   return (
     <div className="col-lg-4 col-md-6 col-sm-6 col-12 mb-4">
@@ -99,4 +109,6 @@ export default function ProductCard({ product }) {
       </div>
     </div>
   );
-}
+});
+
+export default ProductCard;

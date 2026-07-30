@@ -1,13 +1,16 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { memo, useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../../../store/slices/authSlice";
 import Button from "../../../../components/common/Button/Button";
 import "./AdminHeader.css";
 
-export default function AdminHeader({ onToggleSidebar }) {
+const selectAuthUser = (state) => state.auth.user;
+
+
+const AdminHeader = memo(function AdminHeader({ onToggleSidebar }) {
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.auth);
+  const user = useSelector(selectAuthUser);
 
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
@@ -22,18 +25,24 @@ export default function AdminHeader({ onToggleSidebar }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     dispatch(logoutUser());
-  };
+  }, [dispatch]);
 
-  const initials = user?.name
-    ? user.name
-        .split(" ")
-        .map((n) => n[0])
-        .join("")
-        .slice(0, 2)
-        .toUpperCase()
-    : "AD";
+  const handleToggleMenu = useCallback(() => {
+    setMenuOpen((prev) => !prev);
+  }, []);
+
+  // useMemo: initials computation — only recalculates when user.name changes
+  const initials = useMemo(() => {
+    if (!user?.name) return "AD";
+    return user.name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .slice(0, 2)
+      .toUpperCase();
+  }, [user?.name]);
 
   return (
     <header className="admin-top-header glass-panel">
@@ -65,7 +74,7 @@ export default function AdminHeader({ onToggleSidebar }) {
         <div className="admin-user-menu" ref={menuRef}>
           <button
             className="user-menu-trigger"
-            onClick={() => setMenuOpen((prev) => !prev)}
+            onClick={handleToggleMenu}
           >
             <span className="user-avatar-initials">{initials}</span>
             <span className="user-name">{user?.name || "Admin"}</span>
@@ -96,4 +105,6 @@ export default function AdminHeader({ onToggleSidebar }) {
       </div>
     </header>
   );
-}
+});
+
+export default AdminHeader;

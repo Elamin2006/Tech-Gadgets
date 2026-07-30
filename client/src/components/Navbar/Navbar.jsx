@@ -1,41 +1,51 @@
-import React, { useState, useEffect } from "react";
+import React, { memo, useState, useEffect, useCallback, useMemo } from "react";
 import { Container, Nav, Navbar, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutUser } from "../../store/slices/authSlice.js";
+import useThrottle from "../../hooks/useThrottle.js";
 import "./Navbar.css";
 
-export default function NavBar() {
+
+const selectCartLength = (state) => state.cart?.cartList?.length ?? 0;
+const selectAuthUser = (state) => state.auth.user;
+
+const NavBar = memo(function NavBar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { user } = useSelector((state) => state.auth);
-  const { cartList, numOfCartItems, totalCartPrice } = useSelector((state) => state.cart) || { cartList: [] };
+  const user = useSelector(selectAuthUser);
+  const cartLength = useSelector(selectCartLength);
 
   const [expanded, setExpanded] = useState(false);
   const [isFixed, setIsFixed] = useState(false);
 
-  useEffect(() => {
-    const scrollHandler = () => {
-      if (window.scrollY >= 100) {
-        setIsFixed(true);
-      } else {
-        setIsFixed(false);
-      }
-    };
-
-    window.addEventListener("scroll", scrollHandler);
-    
-    return () => {
-      window.removeEventListener("scroll", scrollHandler);
-    };
+  const rawScrollHandler = useCallback(() => {
+    setIsFixed(window.scrollY >= 100);
   }, []);
 
-  const handleLogout = () => {
+  const throttledScrollHandler = useThrottle(rawScrollHandler, 100);
+
+  useEffect(() => {
+    window.addEventListener("scroll", throttledScrollHandler, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", throttledScrollHandler);
+    };
+  }, [throttledScrollHandler]);
+
+  const handleLogout = useCallback(() => {
     dispatch(logoutUser());
     setExpanded(false);
     navigate("/login");
-  };
+  }, [dispatch, navigate]);
+
+  const handleCollapseNav = useCallback(() => setExpanded(false), []);
+
+  // useMemo: className string only recomputes when isFixed changes
+  const navbarClassName = useMemo(
+    () => (isFixed ? "elite-navbar fixed" : "elite-navbar"),
+    [isFixed]
+  );
 
   return (
     <Navbar
@@ -43,7 +53,7 @@ export default function NavBar() {
       expand="md"
       expanded={expanded}
       onToggle={(isExpanded) => setExpanded(isExpanded)}
-      className={isFixed ? "elite-navbar fixed" : "elite-navbar"}
+      className={navbarClassName}
     >
       <Container className="navbar-container">
         
@@ -58,7 +68,7 @@ export default function NavBar() {
               aria-label="Go to Cart Page"
               to="/cart"
               className="cart-wrapper"
-              data-num={cartList.length}
+              data-num={cartLength}
             >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="cart-icon">
                 <path d="M2.25 2.25a.75.75 0 000 1.5h1.386c.17 0 .318.114.362.278l2.558 9.592a3.752 3.752 
@@ -84,7 +94,7 @@ export default function NavBar() {
             <Nav.Item>
               <Link aria-label="Go to Home Page" 
               className="elite-nav-link" to="/" 
-              onClick={() => setExpanded(false)}
+              onClick={handleCollapseNav}
               >
                 Home
               </Link>
@@ -93,7 +103,7 @@ export default function NavBar() {
             <Nav.Item>
               <Link aria-label="Go to Shop Page" 
               className="elite-nav-link" to="/shop" 
-              onClick={() => setExpanded(false)}
+              onClick={handleCollapseNav}
               >
                 Shop
               </Link>
@@ -101,7 +111,7 @@ export default function NavBar() {
             <Nav.Item>
               <Link aria-label="Go to Cart Page" 
               className="elite-nav-link" to="/cart" 
-              onClick={() => setExpanded(false)}
+              onClick={handleCollapseNav}
               >
                 Cart
               </Link>
@@ -110,7 +120,7 @@ export default function NavBar() {
     <Nav.Item>
       <Link aria-label="Go to Orders Page" 
             className="elite-nav-link text-warning fw-bold" to="/orders" 
-            onClick={() => setExpanded(false)}>
+            onClick={handleCollapseNav}>
         Orders
       </Link>
     </Nav.Item>
@@ -121,7 +131,7 @@ export default function NavBar() {
 
             <Nav className="d-flex align-items-center  gap-3">
             <Nav.Item className="expanded-cart">
-              <Link aria-label="Go to Cart Page" to="/cart" className="cart-wrapper" data-num={cartList.length}>
+              <Link aria-label="Go to Cart Page" to="/cart" className="cart-wrapper" data-num={cartLength}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="cart-icon">
                   <path d="M2.25 2.25a.75.75 0 000 1.5h1.386c.17 0 .318.114.362.278l2.558 9.592a3.752 3.752
                    0 00-2.806 3.63c0 .414.336.75.75.75h15.75a.75.75 0 000-1.5H5.378A2.25 2.25 0 017.5 
@@ -150,7 +160,7 @@ export default function NavBar() {
                 <Nav.Item className="ms-md-2 d-flex justify-content-sm-center">
                   <Button as={Link} to="/login" variant="link" 
                   className="btn-signin-elite text-decoration-none p-0 pe-md-2" 
-                  onClick={() => setExpanded(false)}
+                  onClick={handleCollapseNav}
                   >
                     Sign In
                   </Button>
@@ -159,7 +169,7 @@ export default function NavBar() {
                   <Button 
                   as={Link} to="/register" 
                   className="px-3 py-2 rounded-3 btn-signup-elite" 
-                  onClick={() => setExpanded(false)}
+                  onClick={handleCollapseNav}
                   >
                     Sign Up
                   </Button>
@@ -172,4 +182,6 @@ export default function NavBar() {
       </Container>
     </Navbar>
   );
-}
+});
+
+export default NavBar;
