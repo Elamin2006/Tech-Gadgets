@@ -1,13 +1,18 @@
-import React from "react";
+import React, { memo, useState, useCallback } from "react";
+import useDebounce from "../../hooks/useDebounce";
 
-export default function SearchBar({ products, setFilterList }) {
-  const handleSearch = (e) => {
-    const searchTerm = e.target.value.toLowerCase();
-    const filtered = products.filter((item) =>
-      (item.name || item.title || "").toLowerCase().includes(searchTerm)
-    );
-    setFilterList(filtered);
-  };
+const SearchBar = memo(function SearchBar({ onSearch }) {
+  const [inputValue, setInputValue] = useState("");
+
+  const debouncedValue = useDebounce(inputValue, 300);
+
+  React.useEffect(() => {
+    onSearch(debouncedValue);
+  }, [debouncedValue, onSearch]);
+
+  const handleChange = useCallback((e) => {
+    setInputValue(e.target.value);
+  }, []);
 
   return (
     <div className="position-relative w-100 d-flex align-items-center">
@@ -37,10 +42,13 @@ export default function SearchBar({ products, setFilterList }) {
       </span>
       <input
         type="text"
+        value={inputValue}
         placeholder="Search hardware by name or specification..."
         className="form-control elite-search-input"
-        onChange={handleSearch}
+        onChange={handleChange}
       />
     </div>
   );
-}
+});
+
+export default SearchBar;
