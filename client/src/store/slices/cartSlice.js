@@ -23,6 +23,19 @@ export const addItemToCart = createAsyncThunk(
   },
 );
 
+export const updateItemQuantity = createAsyncThunk(
+  "cart/updateItemQuantity",
+  async ({ itemId, quantity }, thunkAPI) => {
+    try {
+      return await CartService.updateCartItemQuantity(itemId, quantity);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.message || "Failed to update item quantity",
+      );
+    }
+  },
+);
+
 export const removeItemFromCart = createAsyncThunk(
   "cart/removeItem",
   async (itemId, thunkAPI) => {
@@ -88,13 +101,22 @@ const cartSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload;
       })
+      .addCase(updateItemQuantity.fulfilled, (state, action) => {
+        state.cartList = action.payload.data?.cartItems || [];
+        state.totalCartPrice = action.payload.data?.totalCartPrice || 0;
+        state.numOfCartItems = action.payload.numOfCartItems || 0;
+        state.error = null;
+      })
+      .addCase(updateItemQuantity.rejected, (state, action) => {
+        state.error = action.payload;
+      })
 
       .addCase(removeItemFromCart.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(removeItemFromCart.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.cartList = action.payload.data?.cartItems || []; // 🟢 تم التصحيح هنا من cartItems إلى cartList ليعمل الـ UI فوراً
+        state.cartList = action.payload.data?.cartItems || []; 
         state.totalCartPrice = action.payload.data?.totalCartPrice || 0;
         state.numOfCartItems = action.payload.numOfCartItems || 0;
         state.error = null;
