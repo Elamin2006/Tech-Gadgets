@@ -17,6 +17,7 @@ import ApiError from "./Utils/apiError.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import cors from "cors";
+import corsOptions from "./config/corsOptions.js";
 
 // ES module equivalent of __dirname
 const __filename = fileURLToPath(import.meta.url);
@@ -30,7 +31,7 @@ const apiVersion = "/api/v1";
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
-app.use(express.json());
+app.use(express.json(corsOptions));
 app.use(logger);
 app.use(cors());
 
