@@ -1,36 +1,58 @@
+/* Wrapper & Container */
 .product-table-wrapper {
   width: 100%;
   overflow-x: auto;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
+  background-color: var(--bg-surface-low);
+  border: 1px solid var(--color-outline-variant);
+  border-radius: 12px;
+  box-shadow: 0 16px 32px -8px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(12px);
 }
 
 .product-custom-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   text-align: left;
   font-size: 0.875rem;
+  color: var(--color-on-surface);
 }
 
+/* Table Header */
 .product-custom-table th {
-  background-color: #f9fafb;
-  padding: 12px 16px;
-  font-weight: 600;
-  color: #4b5563;
-  border-bottom: 1px solid #e5e7eb;
+  background-color: var(--bg-surface-lowest);
+  padding: 1rem 1.25rem;
+  font-weight: 700;
+  color: var(--color-on-surface-variant);
+  border-bottom: 1px solid var(--color-outline-variant);
   text-transform: uppercase;
   font-size: 0.75rem;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
 }
 
+/* Table Cells */
 .product-custom-table td {
-  padding: 14px 16px;
-  border-bottom: 1px solid #e5e7eb;
-  color: #111827;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--color-outline-variant);
+  color: var(--color-on-surface);
   vertical-align: middle;
+  white-space: nowrap;
 }
 
+.product-custom-table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.product-custom-table tbody tr:hover {
+  background-color: var(--bg-surface-container);
+}
+
+.product-custom-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Product Info Cell */
 .product-info-cell {
   display: flex;
   align-items: center;
@@ -40,9 +62,9 @@
 .product-avatar {
   width: 44px;
   height: 44px;
-  border-radius: 6px;
-  background-color: #f3f4f6;
-  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background-color: var(--bg-surface-variant);
+  border: 1px solid var(--color-outline-variant);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -56,6 +78,11 @@
   object-fit: cover;
 }
 
+.fallback-icon {
+  color: var(--color-on-surface-variant);
+  font-size: 1.25rem;
+}
+
 .product-name-block {
   display: flex;
   flex-direction: column;
@@ -64,7 +91,7 @@
 
 .product-title {
   font-weight: 600;
-  color: #111827;
+  color: var(--color-on-surface);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -72,55 +99,114 @@
 
 .product-desc-short {
   font-size: 0.75rem;
-  color: #6b7280;
+  color: var(--color-on-surface-variant);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
+/* Category Pill */
 .category-pill {
-  background-color: #f3f4f6;
-  color: #374151;
+  background-color: var(--bg-surface-variant);
+  color: var(--color-on-surface-variant);
+  border: 1px solid var(--color-outline-variant);
   padding: 4px 10px;
   border-radius: 6px;
   font-size: 0.75rem;
-  font-weight: 500;
+  font-weight: 600;
+  display: inline-block;
 }
 
+/* Discount Badge */
 .discount-badge {
-  background-color: #fef2f2;
-  color: #ef4444;
-  border: 1px solid #fecaca;
+  background-color: rgba(255, 180, 171, 0.16);
+  color: var(--color-error);
+  border: 1px solid rgba(255, 180, 171, 0.35);
   padding: 2px 8px;
   border-radius: 4px;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 0.75rem;
 }
 
-.no-discount { color: #9ca3af; }
-.text-success { color: #16a34a; }
+.no-discount {
+  color: var(--color-on-surface-variant);
+}
+
+.text-success {
+  color: var(--color-primary);
+  text-shadow: 0 0 8px rgba(142, 213, 255, 0.25);
+}
+
 .fw-semibold { font-weight: 600; }
 .fw-bold { font-weight: 700; }
 
+/* Stock Status Badges */
 .stock-badge {
   padding: 4px 10px;
   border-radius: 9999px;
   font-size: 0.75rem;
-  font-weight: 500;
-  display: inline-block;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.stock-in { background-color: #ecfdf5; color: #047857; }
-.stock-out { background-color: #fef2f2; color: #b91c1c; }
+.stock-in {
+  background-color: rgba(56, 189, 248, 0.15);
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary-container);
+}
 
-.table-actions-header, .table-actions-cell { text-align: right !important; }
+.stock-out {
+  background-color: rgba(255, 180, 171, 0.16);
+  color: var(--color-error);
+  border: 1px solid rgba(255, 180, 171, 0.35);
+}
 
+/* Actions Column & Buttons */
+.table-actions-header,
+.table-actions-cell {
+  text-align: right !important;
+}
+
+.action-buttons-group {
+  display: inline-flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+/* Custom Red Delete Button */
+.btn-delete-custom {
+  color: var(--color-error) !important;
+  border: 1px solid rgba(255, 180, 171, 0.35) !important;
+  background-color: rgba(147, 0, 10, 0.25) !important;
+  transition: all 0.2s ease !important;
+}
+
+.btn-delete-custom:hover {
+  background-color: var(--color-error-container) !important;
+  color: var(--color-on-error-container) !important;
+  border-color: var(--color-error) !important;
+  box-shadow: 0 0 10px rgba(255, 180, 171, 0.3) !important;
+}
+
+/* Empty State */
 .product-table-empty {
   text-align: center;
   padding: 48px;
-  background: #f9fafb;
-  border: 1px dashed #d1d5db;
-  border-radius: 8px;
+  background: var(--bg-surface-low);
+  border: 1px dashed var(--color-outline-variant);
+  border-radius: 12px;
 }
-.empty-icon { font-size: 3rem; color: #9ca3af; margin-bottom: 8px; }
-.empty-text { color: #6b7280; margin: 0; font-size: 0.9375rem; }
+
+.empty-icon {
+  font-size: 3rem;
+  color: var(--color-on-surface-variant);
+  margin-bottom: 8px;
+}
+
+.empty-text {
+  color: var(--color-on-surface-variant);
+  margin: 0;
+  font-size: 0.9375rem;
+}
