@@ -7,10 +7,14 @@
   ],
   "scripts": {
     "dev:client": "npm --workspace client run dev",
+    "build": "npm --workspace client run build",
     "build:client": "npm --workspace client run build",
     "lint:client": "npm --workspace client run lint",
     "preview:client": "npm --workspace client run preview",
     "test:server": "npm --workspace server test",
     "start": "nodemon index.js"
+  },
+  "engines": {
+    "node": ">=20.19.0"
   }
 }
