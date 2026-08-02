@@ -1,0 +1,38 @@
+Portfolio License (Custom)
+Copyright (c) 2026 Elamin Mohammedelmugtaba ELamin (GitHub: Elamin2006)
+
+This repository is shared publicly as part of a personal portfolio and
+build-in-public learning process.
+
+Permission is granted to any person viewing this repository to:
+  - Read, study, and learn from the source code and documentation.
+  - Fork or clone the repository for personal, non-public learning purposes
+    (e.g., running it locally to understand how it works).
+  - Reference small snippets of code in your own projects, provided clear
+    attribution is given (see below).
+
+The following are NOT permitted without explicit written permission from
+the copyright holder:
+  - Publishing this code, in whole or substantial part, as your own
+    portfolio project, coursework submission, or freelance deliverable.
+  - Presenting this project (or a renamed/reskinned version of it) as your
+    own original work to recruiters, employers, clients, or in job
+    applications.
+  - Redistributing this repository, in whole or substantial part, as a
+    standalone public project without credit to the original author.
+  - Commercial use of this code without permission.
+
+Attribution requirement:
+  If you reference, adapt, or build upon a meaningful portion of this code
+  in your own public work, you must credit the original author as follows:
+    "Based on / adapted from Tech-Gadgets by Elamin (github.com/Elamin2006)"
+
+Disclaimer:
+  THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+  OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT.
+  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER
+  LIABILITY ARISING FROM THE USE OF THIS SOFTWARE.
+
+For permissions beyond the scope of this license, contact the author via
+GitHub (github.com/Elamin2006) or LinkedIn.
