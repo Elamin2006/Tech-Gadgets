@@ -5,12 +5,12 @@ import { visualizer } from 'rollup-plugin-visualizer';
 export default defineConfig({
   plugins: [
     react(),
-    
+
     visualizer({
       filename: 'dist/stats.html',
-      open: false,       
-      gzipSize: true,    
-      brotliSize: true,  
+      open: false,
+      gzipSize: true,
+      brotliSize: true,
       template: 'treemap',
     }),
   ],
@@ -41,9 +41,7 @@ export default defineConfig({
             if (id.includes('react-toastify')) {
               return 'vendor-toast';
             }
-            if (id.includes('/axios/')) {
-              return 'vendor-axios';
-            }
+            
           }
         },
       },
