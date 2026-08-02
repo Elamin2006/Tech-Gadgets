@@ -14,14 +14,14 @@ import Loader from "../components/common/Loader/Loader";
 
 // Lazy-loaded Public & User Views
 const Home = lazy(() => import("../pages/Home.jsx"));
-const Shop = lazy(() => import("../pages/Shop/Shop"));
+const Shop = lazy(() => import("../pages/Shop/Shop.jsx"));
 const Product = lazy(() => import("../pages/Product/Product.jsx"));
 const Cart = lazy(() => import("../pages/Cart/Cart.jsx"));
 const Orders = lazy(() => import("../pages/Order/Order.jsx"));
 
 // Lazy-loaded Auth Views
 const Login = lazy(() => import("../pages/Login/Login.jsx"));
-const Register = lazy(() => import("../pages/Register/Register"));
+const Register = lazy(() => import("../pages/Register/Register.jsx"));
 const ForgotPassword = lazy(() => import("../pages/ForgotPassword/ForgotPassword.jsx"));
 const VerifyResetCode = lazy(() => import("../pages/VerifyResetCode/VerifyResetCode.jsx"));
 const ResetPassword = lazy(() => import("../pages/ResetPassword/ResetPassword.jsx"));
