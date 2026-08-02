@@ -12,6 +12,5 @@ build
 
 *.log
 npm-debug.log*
-CLIENT_DOCS.md
 .env.development
 .env.production
