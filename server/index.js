@@ -17,7 +17,7 @@ import ApiError from "./Utils/apiError.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import cors from "cors";
-import corsOptions from "./config/corsOptions.js";
+import corsOptions from "./config/Corsoptions.js";
 
 // ES module equivalent of __dirname
 const __filename = fileURLToPath(import.meta.url);
