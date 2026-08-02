@@ -1,8 +1,8 @@
 # Tech Gadgets — Frontend
 
 A full-stack MERN e-commerce storefront and admin dashboard, built end-to-end as a self-initiated portfolio project. This repo contains:
-**Live demo:** _add your Vercel URL here_
-**Backend repo:** _link to your backend repo here_
+**Live demo:** https://tech-gadgets-client.vercel.app/
+**Backend repo:** https://tech-gadgets-server-kappa.vercel.app/api/v1
 ---
 
 ## Features
@@ -50,7 +50,7 @@ A full-stack MERN e-commerce storefront and admin dashboard, built end-to-end as
 ### Installation
 
 ```bash
-git clone https://github.com/Elamin2006/<repo-name>.git
+git clone https://github.com/Elamin2006/Tech-Gadgets
 cd <repo-name>
 npm install
 ```
@@ -63,7 +63,7 @@ Create a `.env` file in the project root:
 VITE_API_URL=http://localhost:5000/api/v1
 ```
 
-For production, point this at your deployed backend URL instead. Vite only exposes variables prefixed with `VITE_` to the client — anything without that prefix won't be available in the browser bundle (and secret keys should never go here regardless, since everything in `VITE_*` ships to the browser).
+For production, point this at your deployed backend URL instead. Vite only exposes variables prefixed with `VITE_` to the client, anything without that prefix won't be available in the browser bundle (and secret keys should never go here regardless, since everything in `VITE_*` ships to the browser).
 
 ### Running Locally
 
@@ -115,4 +115,4 @@ Set `VITE_API_URL` as an environment variable in the Vercel project settings, po
 
 ## License
 
-_Add your chosen license here (e.g. CC BY-NC 4.0, or a custom portfolio license)._
+This project is under a custom portfolio license, see LICENSE for details.
