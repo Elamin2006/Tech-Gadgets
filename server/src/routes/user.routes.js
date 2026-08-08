@@ -1,7 +1,7 @@
 import express from 'express';
-import {register, login, forgotPassword, verifyResetCode, resetPassword} from '../Controllers/user.controller.js'
-import validationMiddleware from '../Middlewares/validation.middleware.js';
-import { registerValidation, loginValidation } from '../validations/user.validation.js';
+import {register, login, forgotPassword, verifyResetCode, resetPassword} from '../controllers/user.controller.js'
+import validationMiddleware from '../middlewares/validation.middleware.js';
+import { registerValidation, loginValidation } from '../validators/user.validation.js';
 const userRouter = express.Router();
 
 userRouter.post("/register", validationMiddleware(registerValidation), register);

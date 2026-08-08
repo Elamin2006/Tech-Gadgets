@@ -1,6 +1,6 @@
-import Category from "../Model/Category.model.js";
-import Product from "../Model/Product.model.js";
-import ApiError from "../Utils/apiError.js";
+import Category from "../models/category.model.js";
+import Product from "../models/product.model.js";
+import ApiError from "../utils/apiError.js";
 import asyncHandler from "express-async-handler";
 import fs from "fs";
 import { v2 as cloudinary } from "cloudinary"; 

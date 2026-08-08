@@ -5,15 +5,15 @@ import {
   updateCartItemQuantity,
   removeFromCart,
   clearCart,
-} from "../Controllers/cart.controller.js";
+} from "../controllers/cart.controller.js";
 
-import authentication from "../Middlewares/authentication.js";
+import authentication from "../middlewares/authentication.js";
 
-import validatorMiddleware from "../Middlewares/validation.middleware.js";
+import validatorMiddleware from "../middlewares/validation.middleware.js";
 import {
   addToCartSchema,
   updateCartItemQuantitySchema,
-} from "../validations/cart.validation.js";
+} from "../validators/cart.validation.js";
 
 const cartRouter = express.Router();
 

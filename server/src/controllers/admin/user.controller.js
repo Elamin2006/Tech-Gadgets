@@ -1,6 +1,6 @@
 import asyncHandler from "express-async-handler";
-import User from "../../Model/User.model.js";
-import ApiError from "../../Utils/apiError.js";
+import User from "../../models/user.model.js";
+import ApiError from "../../utils/apiError.js";
 
 export const getAllUsers = asyncHandler(async (req, res) => {
   const { page = 1, limit = 10, role } = req.query;

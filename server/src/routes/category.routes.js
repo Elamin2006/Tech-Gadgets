@@ -4,13 +4,13 @@ import {
     getCategories,
     deleteCategory,
     getCategoryById,
-} from "../Controllers/category.controller.js";
+} from "../controllers/category.controller.js";
 
-import authentication from "../Middlewares/authentication.js";
-import { allowedTo } from "../Middlewares/authorization.js";
+import authentication from "../middlewares/authentication.js";
+import { allowedTo } from "../middlewares/authorization.js";
 
-import validatorMiddleware from "../Middlewares/validation.middleware.js";
-import { createCategorySchema } from "../validations/category.validation.js";
+import validatorMiddleware from "../middlewares/validation.middleware.js";
+import { createCategorySchema } from "../validators/category.validation.js";
 
 const categoryRouter = express.Router();
 

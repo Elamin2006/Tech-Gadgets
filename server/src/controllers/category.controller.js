@@ -1,6 +1,6 @@
-import Category from "../Model/Category.model.js";
+import Category from "../models/category.model.js";
 import asyncHandler from "express-async-handler";
-import ApiError from "../Utils/apiError.js";
+import ApiError from "../utils/apiError.js";
 
 // Create Category
 export const createCategory = asyncHandler(async (req, res, next) => {

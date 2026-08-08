@@ -1,4 +1,4 @@
-import { logEvents } from "../Utils/logger.js";
+import { logEvents } from "../utils/logger.js";
 
 const errorHandler = (err, req, res, next) => {
   if (res.headersSent) {

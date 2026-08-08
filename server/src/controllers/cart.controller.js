@@ -1,6 +1,6 @@
-import Product from "../Model/Product.model.js";
-import Cart from "../Model/Cart.model.js";
-import ApiError from "../Utils/apiError.js";
+import Product from "../models/product.model.js";
+import Cart from "../models/cart.model.js";
+import ApiError from "../utils/apiError.js";
 import asyncHandler from "express-async-handler";
 
 const calculateProductPriceAfterDiscount = (product) => {

@@ -5,14 +5,14 @@ import {
     getAllProducts,
     getProductById,
     updateProduct
-} from '../Controllers/product.controller.js';
+} from '../controllers/product.controller.js';
 
-import authentication from '../Middlewares/authentication.js';
-import { allowedTo } from '../Middlewares/authorization.js';
-import imageUpload from '../Middlewares/uploadImage.js';
+import authentication from '../middlewares/authentication.js';
+import { allowedTo } from '../middlewares/authorization.js';
+import imageUpload from '../middlewares/uploadImage.js';
 
-import validatorMiddleware from '../Middlewares/validation.middleware.js';
-import { createProductSchema, updateProductSchema } from '../validations/product.validation.js';
+import validatorMiddleware from '../middlewares/validation.middleware.js';
+import { createProductSchema, updateProductSchema } from '../validators/product.validation.js';
 
 const productRouter = express.Router();
 

@@ -1,4 +1,4 @@
-import ApiError from '../Utils/apiError.js';
+import ApiError from '../utils/apiError.js';
 
 const validatorMiddleware = (schema) => {
     return (req, res, next) => {

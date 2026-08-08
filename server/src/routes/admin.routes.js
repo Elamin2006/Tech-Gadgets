@@ -1,18 +1,18 @@
 import express from "express";
-import authentication from "../Middlewares/authentication.js";
-import { allowedTo } from "../Middlewares/authorization.js";
+import authentication from "../middlewares/authentication.js";
+import { allowedTo } from "../middlewares/authorization.js";
 import {
   getDashboardStats,
   getSalesPerformance,
   getRecentActivityLog,
-} from "../Controllers/admin/dashboard.controller.js";
+} from "../controllers/admin/dashboard.controller.js";
 import {
   deleteUserAccount,
   getAllUsers,
   getUserById,
   toggleUserBanStatus,
   updateUserRole,
-} from "../Controllers/admin/user.controller.js";
+} from "../controllers/admin/user.controller.js";
 
 const router = express.Router();
 

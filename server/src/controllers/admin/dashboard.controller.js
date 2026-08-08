@@ -1,7 +1,7 @@
 import asyncHandler from "express-async-handler";
-import User from "../../Model/User.model.js";
-import Order from "../../Model/Order.model.js";
-import Product from "../../Model/Product.model.js";
+import User from "../../models/user.model.js";
+import Order from "../../models/order.model.js";
+import Product from "../../models/product.model.js";
 
 export const getDashboardStats = asyncHandler(async (req, res) => {
   const totalUsers = await User.countDocuments();

@@ -5,13 +5,13 @@ import {
   getOrderById,
   updateOrderStatus,
   deleteOrderById,
-} from "../Controllers/order.controller.js";
+} from "../controllers/order.controller.js";
 
-import authentication from "../Middlewares/authentication.js";
-import { allowedTo } from "../Middlewares/authorization.js";
-import validatorMiddleware from "../Middlewares/validation.middleware.js";
+import authentication from "../middlewares/authentication.js";
+import { allowedTo } from "../middlewares/authorization.js";
+import validatorMiddleware from "../middlewares/validation.middleware.js";
 
-import { createCashOrderSchema } from "../validations/order.validation.js";
+import { createCashOrderSchema } from "../validators/order.validation.js";
 
 const orderRouter = express.Router();
 
