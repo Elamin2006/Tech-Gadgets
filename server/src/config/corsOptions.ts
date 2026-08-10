@@ -1,11 +1,12 @@
+import type { CorsOptions } from "cors";
+
 const allowedOrigins = (process.env.CLIENT_URLS || "")
   .split(",")
   .map((origin) => origin.trim())
   .filter(Boolean);
 
-const corsOptions = {
+const corsOptions: CorsOptions = {
   origin: (origin, callback) => {
-    
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
