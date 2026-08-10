@@ -4,45 +4,58 @@ import fs from "fs";
 import path from "path";
 import fsPromises from "fs/promises";
 import { fileURLToPath } from "url";
+import type { Request, Response, NextFunction } from "express";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const logEvents = async (message, logFileName) => {
-  const dateTime = `${format(new Date(), "yyyy-MM-dd\tHH:mm:ss")}`;
+const logsDir = path.join(__dirname, "../..", "logs");
+
+const logEvents = async (
+  message: string,
+  logFileName: string
+): Promise<void> => {
+  const dateTime = format(new Date(), "yyyy-MM-dd\tHH:mm:ss");
+
   const logItem = `${dateTime}\t${uuid()}\t${message}\n`;
+
   if (process.env.VERCEL) {
     console.log(`[LOG] ${logFileName}: ${message}`);
     return;
   }
+
   try {
-    if (!fs.existsSync(path.join(__dirname, "../..", "logs"))) {
+    if (!fs.existsSync(logsDir)) {
       await fsPromises.mkdir(logsDir, { recursive: true });
     }
+
     await fsPromises.appendFile(
-      path.join(__dirname, "../..", "logs", logFileName),
-      logItem,
+      path.join(logsDir, logFileName),
+      logItem
     );
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
   }
 };
 
-const getRequestOrigin = (req) => {
+const getRequestOrigin = (req: Request): string => {
   return req.headers.origin || req.get("host") || req.ip || "unknown origin";
 };
 
-const logger = (req, res, next) => {
+const logger = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
   const origin = getRequestOrigin(req);
 
   res.on("finish", () => {
-    logEvents(
+    void logEvents(
       `${req.method}\t${res.statusCode}\t${req.url}\t${origin}`,
-      "reqLog.log",
+      "reqLog.log"
     );
   });
 
-  console.log(`${req.method} ${req.path}`);
   next();
 };
 
