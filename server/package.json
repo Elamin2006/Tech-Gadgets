@@ -4,11 +4,11 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-  "dev": "tsx watch server.ts",
-  "build": "tsc",
-  "start": "node dist/server.js",
-  "test": "echo \"Error: no test specified\" && exit 1"
-},
+    "dev": "tsx watch server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "keywords": [],
   "author": "Elamin Mohammedelmubtaba",
   "license": "ISC",
@@ -31,6 +31,7 @@
     "uuid": "^11.0.5"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
