@@ -1,7 +1,25 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
-const userSchema = new mongoose.Schema(
+import type { UserRole } from "../types/auth.types.js";
+
+export interface IUser {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+
+  role?: UserRole;
+  isBanned?: boolean;
+
+  createdAt?: Date;
+
+  passwordResetCode?: string;
+  passwordResetExpires?: Date;
+  passwordResetVerified?: boolean;
+}
+
+const userSchema = new mongoose.Schema<IUser>(
   {
     firstName: {
       type: String,
@@ -57,13 +75,12 @@ userSchema.virtual("name").get(function () {
 });
 
 userSchema.pre("save", async function (next) {
-  const user = this;
-  if (!user.isModified("password")) {
+  if (!this.isModified("password")) {
     return next();
   }
-  user.password = await bcrypt.hash(user.password, 10);
+  this.password = await bcrypt.hash(this.password, 10);
   next();
 });
-const User = mongoose.model("User", userSchema);
+const User = mongoose.model<IUser>("User", userSchema);
 
 export default User;
