@@ -1,6 +1,18 @@
 import mongoose from "mongoose";
 
-const cartSchema = new mongoose.Schema(
+export interface ICartItem {
+  productId: mongoose.Types.ObjectId;
+  quantity?: number;
+  price: number;
+}
+
+export interface ICart {
+  userId: mongoose.Types.ObjectId;
+  cartItems: ICartItem[];
+  totalCartPrice?: number;
+}
+
+const cartSchema = new mongoose.Schema<ICart>(
     {
         userId: {
             type: mongoose.Schema.Types.ObjectId,
@@ -36,5 +48,5 @@ const cartSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-const Cart = mongoose.model("Cart", cartSchema);
+const Cart = mongoose.model<ICart>("Cart", cartSchema);
 export default Cart;
