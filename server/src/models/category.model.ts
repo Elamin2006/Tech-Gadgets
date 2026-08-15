@@ -1,6 +1,11 @@
 import mongoose from "mongoose";
 
-const categorySchema = new mongoose.Schema(
+export interface ICategory {
+  userId?: mongoose.Types.ObjectId;
+  name: string;
+}
+
+const categorySchema = new mongoose.Schema<ICategory>(
     {
         userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
         name: {
@@ -16,5 +21,5 @@ const categorySchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-const Category = mongoose.model("Category", categorySchema);
+const Category = mongoose.model<ICategory>("Category", categorySchema);
 export default Category;
