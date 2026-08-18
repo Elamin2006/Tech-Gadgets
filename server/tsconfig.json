@@ -19,6 +19,6 @@
     "types": ["node"]
 
   },
-  "include": ["server.ts", "src/**/*.ts"],
+  "include": ["server.ts", "src/**/*.ts", "src/utils/apiError.ts", "src/config/corsOptions.ts", "src/utils/logger.ts", "src/models/order.model.ts"],
   "exclude": ["node_modules", "dist"]
 }
