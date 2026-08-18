@@ -1,22 +1,22 @@
 import type { RequestHandler } from "express";
-import type { ObjectSchema } from "joi";
+import type { ZodType } from "zod";
 
 import ApiError from "../utils/apiError.js";
 
 const validatorMiddleware = (
-  schema: ObjectSchema,
+  schema: ZodType,
 ): RequestHandler => {
-  return (req, res, next) => {
-    const { error } = schema.validate(req.body);
+  return (req, _res, next) => {
+    const result = schema.safeParse(req.body);
 
-    if (error) {
-      return next(
-        new ApiError(
-          error.details[0].message,
-          400,
-        ),
-      );
+    if (!result.success) {
+      const errorMessage =
+        result.error.issues[0]?.message ?? "Invalid request data";
+
+      return next(new ApiError(errorMessage, 400));
     }
+
+    req.body = result.data;
 
     next();
   };
