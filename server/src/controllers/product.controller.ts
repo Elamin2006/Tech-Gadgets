@@ -1,13 +1,26 @@
+import type { RequestHandler } from "express";
+import asyncHandler from "express-async-handler";
 import Category from "../models/category.model.js";
 import Product from "../models/product.model.js";
 import ApiError from "../utils/apiError.js";
-import asyncHandler from "express-async-handler";
-import fs from "fs";
 import { deleteImage } from "../services/cloudinary.js";
 
+interface ProductBody {
+  name: string;
+  description: string;
+  categoryId: string;
+  price: number;
+  discount?: number;
+  quantity?: number;
+}
+
+interface UpdateProductData extends Partial<ProductBody> {
+  image?: string;
+}
+
 // 1. Create Product
-export const createProduct = asyncHandler(async (req, res, next) => {
-  const product = req.body;
+export const createProduct : RequestHandler = asyncHandler(async (req, res, next) => {
+  const product = req.body as ProductBody;
 
   const category = await Category.findById(product.categoryId);
   if (!category) {
@@ -15,7 +28,7 @@ export const createProduct = asyncHandler(async (req, res, next) => {
   }
 
   const productData = {
-    userId: req.user?._id,
+    userId: req.user?.id,
     categoryId: category._id,
     name: product.name,
     description: product.description,
@@ -34,7 +47,7 @@ export const createProduct = asyncHandler(async (req, res, next) => {
 });
 
 // Get All Products
-export const getAllProducts = asyncHandler(async (req, res, next) => {
+export const getAllProducts : RequestHandler = asyncHandler(async (_req, res, next) => {
   const products = await Product.find().populate("categoryId", "name");
 
   res
@@ -43,7 +56,7 @@ export const getAllProducts = asyncHandler(async (req, res, next) => {
 });
 
 // Get Product By ID
-export const getProductById = asyncHandler(async (req, res, next) => {
+export const getProductById : RequestHandler = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const product = await Product.findById(id).populate("categoryId", "name");
 
@@ -55,7 +68,7 @@ export const getProductById = asyncHandler(async (req, res, next) => {
 });
 
 // Delete Product
-export const deleteProduct = asyncHandler(async (req, res, next) => {
+export const deleteProduct : RequestHandler = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
 
   const product = await Product.findById(id);
@@ -74,9 +87,9 @@ export const deleteProduct = asyncHandler(async (req, res, next) => {
 });
 
 // Update Product
-export const updateProduct = asyncHandler(async (req, res, next) => {
+export const updateProduct : RequestHandler = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
-  const newData = req.body;
+  const newData = req.body as UpdateProductData;
 
   const product = await Product.findById(id);
   if (!product) {
@@ -90,12 +103,12 @@ export const updateProduct = asyncHandler(async (req, res, next) => {
     }
   }
 
-  if (req.file) {
+  if (req.file?.path) {
    if (product.image) {
   await deleteImage(product.image);
 }
+  newData.image = req.file.path;
 
-    newData.image = req.file.path;
   }
 
   const updatedProduct = await Product.findByIdAndUpdate(id, newData, {
