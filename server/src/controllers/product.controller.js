@@ -3,7 +3,7 @@ import Product from "../models/product.model.js";
 import ApiError from "../utils/apiError.js";
 import asyncHandler from "express-async-handler";
 import fs from "fs";
-import { v2 as cloudinary } from "cloudinary"; 
+import { deleteImage } from "../services/cloudinary.js";
 
 // 1. Create Product
 export const createProduct = asyncHandler(async (req, res, next) => {
@@ -63,16 +63,9 @@ export const deleteProduct = asyncHandler(async (req, res, next) => {
     throw new ApiError(`No Product Found With This ID: ${id}`, 404);
   }
 
-  if (product.image && product.image.includes("cloudinary")) {
-    
-    const urlParts = product.image.split("/");
-    const folderName = urlParts[urlParts.length - 2];
-    const fileNameWithExt = urlParts[urlParts.length - 1];
-    const fileName = fileNameWithExt.split(".")[0];
-    const publicId = `${folderName}/${fileName}`; 
-
-    await cloudinary.uploader.destroy(publicId);
-  }
+  if (product.image) {
+  await deleteImage(product.image);
+}
 
   await product.deleteOne();
   res
@@ -98,15 +91,9 @@ export const updateProduct = asyncHandler(async (req, res, next) => {
   }
 
   if (req.file) {
-    if (product.image && product.image.includes("cloudinary")) {
-      const urlParts = product.image.split("/");
-      const folderName = urlParts[urlParts.length - 2];
-      const fileNameWithExt = urlParts[urlParts.length - 1];
-      const fileName = fileNameWithExt.split(".")[0];
-      const publicId = `${folderName}/${fileName}`;
-
-      await cloudinary.uploader.destroy(publicId);
-    }
+   if (product.image) {
+  await deleteImage(product.image);
+}
 
     newData.image = req.file.path;
   }
