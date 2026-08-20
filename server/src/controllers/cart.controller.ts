@@ -1,9 +1,24 @@
+import type { RequestHandler } from "express";
+import mongoose from "mongoose";
+
 import Product from "../models/product.model.js";
 import Cart from "../models/cart.model.js";
 import ApiError from "../utils/apiError.js";
 import asyncHandler from "express-async-handler";
 
-const calculateProductPriceAfterDiscount = (product) => {
+interface AddToCartBody {
+  productId: string;
+  quantity: number;
+}
+
+interface UpdateCartItemBody {
+  quantity: number;
+}
+
+const calculateProductPriceAfterDiscount = (product: {
+    price: number;
+    discount?: number;
+  }) => {
   let finalPrice = product.price;
   if (product.discount && product.discount > 0) {
     finalPrice = product.price - (product.price * product.discount) / 100;
@@ -11,7 +26,13 @@ const calculateProductPriceAfterDiscount = (product) => {
   return finalPrice;
 };
 
-const calcTotalCartPrice = (cart) => {
+const calcTotalCartPrice = (cart: {
+  cartItems: Array<{
+    quantity: number;
+    price: number;
+  }>;
+  totalCartPrice: number;
+}) : number => {
   let totalPrice = 0;
   cart.cartItems.forEach((item) => {
     totalPrice += item.quantity * item.price;
@@ -21,9 +42,9 @@ const calcTotalCartPrice = (cart) => {
 };
 
 // Add Product To Cart
-export const addToCart = asyncHandler(async (req, res, next) => {
-  const { productId, quantity } = req.body;
-  const userId = req.user?._id;
+export const addToCart : RequestHandler = asyncHandler(async (req, res, next) => {
+  const { productId, quantity } = req.body as AddToCartBody;
+  const userId = req.user?.id;
 
   const product = await Product.findById(productId);
   if (!product) {
@@ -37,7 +58,7 @@ export const addToCart = asyncHandler(async (req, res, next) => {
   if (!cart) {
     cart = await Cart.create({
       userId,
-      cartItems: [{ productId, quantity, price: finalProductPrice }],
+      cartItems: [{ productId: new mongoose.Types.ObjectId(productId), quantity, price: finalProductPrice }],
     });
   } else {
     const itemIndex = cart.cartItems.findIndex(
@@ -48,7 +69,9 @@ export const addToCart = asyncHandler(async (req, res, next) => {
       cart.cartItems[itemIndex].quantity += quantity;
       cart.cartItems[itemIndex].price = finalProductPrice;
     } else {
-      cart.cartItems.push({ productId, quantity, price: finalProductPrice });
+      const productObjectId = new mongoose.Types.ObjectId(productId);
+
+      cart.cartItems.push({ productId: productObjectId, quantity, price: finalProductPrice });
     }
   }
 
@@ -59,6 +82,9 @@ export const addToCart = asyncHandler(async (req, res, next) => {
     "cartItems.productId",
     "name price image",
   );
+  if (!refreshedCart) {
+  throw new ApiError("Cart not found after update", 404);
+}
 
   res.status(200).json({
     status: "Success",
@@ -67,8 +93,8 @@ export const addToCart = asyncHandler(async (req, res, next) => {
   });
 });
 // Get Logged User Cart
-export const getLoggedUserCart = asyncHandler(async (req, res, next) => {
-  const userId = req.user?._id;
+export const getLoggedUserCart : RequestHandler = asyncHandler(async (req, res, next) => {
+  const userId = req.user?.id;
 
   const cart = await Cart.findOne({ userId }).populate(
     "cartItems.productId",
@@ -86,19 +112,19 @@ export const getLoggedUserCart = asyncHandler(async (req, res, next) => {
 });
 
 // Update Cart Item Quantity
-export const updateCartItemQuantity = asyncHandler(async (req, res, next) => {
-  const { quantity } = req.body;
+export const updateCartItemQuantity : RequestHandler= asyncHandler(async (req, res, next) => {
+  const { quantity } = req.body as UpdateCartItemBody;
   const { itemId } = req.params;
-  const userId = req.user?._id;
+  const userId = req.user?.id;
 
   const cart = await Cart.findOne({ userId });
   if (!cart) {
     throw new ApiError("No Cart Found For This User", 404);
   }
 
-  const itemIndex = cart.cartItems.findIndex(
-    (item) => item._id.toString() === itemId,
-  );
+ const itemIndex = cart.cartItems.findIndex(
+  (item) => item._id?.toString() === itemId,
+);
   if (itemIndex === -1) {
     throw new ApiError("This item is no longer in your cart", 404);
   }
@@ -122,6 +148,10 @@ export const updateCartItemQuantity = asyncHandler(async (req, res, next) => {
     "name price image",
   );
 
+  if (!refreshedCart) {
+  throw new ApiError("Cart not found after update", 404);
+}
+
   res.status(200).json({
     status: "Success",
     numOfCartItems: refreshedCart.cartItems.length,
@@ -132,19 +162,24 @@ export const updateCartItemQuantity = asyncHandler(async (req, res, next) => {
 // Remove Product From Cart
 export const removeFromCart = asyncHandler(async (req, res, next) => {
   const { itemId } = req.params;
-  const userId = req.user?._id;
+  const userId = req.user?.id;
 
   let cart = await Cart.findOne({ userId });
   if (!cart) {
     throw new ApiError("No Cart Found For This User", 404);
   }
+
   const itemExists = cart.cartItems.some(
-    (item) => item._id.toString() === itemId,
-  );
+  (item) => item._id?.toString() === itemId,
+);
+
   if (!itemExists) {
     throw new ApiError("This item is no longer in your cart", 404);
   }
-  cart.cartItems.pull(itemId);
+
+  cart.cartItems = cart.cartItems.filter(
+    (item) => item._id?.toString() !== itemId
+  );
 
   calcTotalCartPrice(cart);
 
@@ -160,7 +195,7 @@ export const removeFromCart = asyncHandler(async (req, res, next) => {
 // Clear User Cart
 export const clearCart = asyncHandler(async (req, res, next) => {
   const cart = await Cart.findOneAndUpdate(
-    { userId: req.user?._id },
+    { userId: req.user?.id },
     {
       $set: {
         cartItems: [],
