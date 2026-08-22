@@ -6,10 +6,10 @@ import { cloudinary } from "../services/cloudinary.js";
 
 const storage = new CloudinaryStorage({
   cloudinary,
-  params: {
+  params: async () => ({
     folder: "tech_gadgets",
     allowed_formats: ["jpg", "jpeg", "png", "webp"],
-  },
+  }),
 });
 
 const uploadImage = multer({
