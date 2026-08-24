@@ -1,86 +1,149 @@
-import mongoose from "mongoose";
+import mongoose, { type Model } from "mongoose";
 import bcrypt from "bcryptjs";
 
 import type { UserRole } from "../types/auth.types.js";
 
-export interface IUser {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-
-  role?: UserRole;
-  isBanned?: boolean;
-
-  createdAt?: Date;
-
-  passwordResetCode?: string;
-  passwordResetExpires?: Date;
-  passwordResetVerified?: boolean;
+export interface IAddress {
+  fullName: string;
+  phone: string;
+  country: string;
+  city: string;
+  address: string;
+  postalCode: string;
 }
 
-const userSchema = new mongoose.Schema<IUser>(
+export interface IUser {
+  username: string;
+  email: string;
+  password: string;
+  phone?: string;
+  avatar?: string;
+  role?: UserRole;
+  addresses?: IAddress[];
+  wishlist?: mongoose.Types.ObjectId[];
+  isVerified?: boolean;
+  resetPasswordToken?: string;
+  resetPasswordExpire?: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface IUserMethods {
+  comparePassword(enteredPassword: string): Promise<boolean>;
+}
+
+type UserModel = Model<IUser, object, IUserMethods>;
+
+const addressSchema = new mongoose.Schema<IAddress>(
   {
-    firstName: {
+    fullName: {
       type: String,
-      required: true,
-      trim: true,
-      minlength: [3, "First name must be at least 3 characters long"],
     },
-    lastName: {
+
+    phone: {
       type: String,
-      required: true,
-      trim: true,
-      minlength: [3, "Last name must be at least 3 characters long"],
     },
+
+    country: {
+      type: String,
+    },
+
+    city: {
+      type: String,
+    },
+
+    address: {
+      type: String,
+    },
+
+    postalCode: {
+      type: String,
+    },
+  },
+  {
+    _id: false,
+  },
+);
+
+const userSchema = new mongoose.Schema<IUser, UserModel, IUserMethods>(
+  {
+    username: {
+      type: String,
+      required: [true, "Username is required"],
+      trim: true,
+    },
+
     email: {
       type: String,
-      required: true,
-      trim: true,
-      lowercase: true,
+      required: [true, "Email is required"],
       unique: true,
+      lowercase: true,
+      trim: true,
     },
+
     password: {
       type: String,
-      required: true,
-      trim: true,
-      minlength: [6, "Password must be at least 6 characters long"],
+      required: [true, "Password is required"],
+      select: false,
     },
+
+    phone: {
+      type: String,
+    },
+
+    avatar: {
+      type: String,
+      default:
+        "https://res.cloudinary.com/no625vlt/image/upload/v1785078789/Screenshot_2026-07-26_181048_mzehzd.png",
+    },
+
     role: {
       type: String,
       enum: ["user", "admin"],
       default: "user",
     },
-    isBanned: {
+
+    addresses: [addressSchema],
+
+    wishlist: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+      },
+    ],
+
+    isVerified: {
       type: Boolean,
       default: false,
     },
 
-    createdAt: {
-      type: Date,
-      default: Date.now,
+    resetPasswordToken: {
+      type: String,
     },
-    passwordResetCode: { type: String },
-    passwordResetExpires: { type: Date },
-    passwordResetVerified: { type: Boolean, default: false },
+
+    resetPasswordExpire: {
+      type: Date,
+    },
   },
   {
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true },
+    timestamps: true,
   },
 );
 
-userSchema.virtual("name").get(function () {
-  return `${this.firstName || ""} ${this.lastName || ""}`.trim();
+userSchema.pre("save", async function () {
+  if (!this.isModified("password")) {
+    return;
+  }
+
+  this.password = await bcrypt.hash(this.password, 10);
 });
 
-userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) {
-    return next();
-  }
-  this.password = await bcrypt.hash(this.password, 10);
-  next();
-});
-const User = mongoose.model<IUser>("User", userSchema);
+userSchema.methods.comparePassword = async function (
+  enteredPassword: string,
+): Promise<boolean> {
+  return bcrypt.compare(enteredPassword, this.password);
+};
+
+const User = mongoose.model<IUser, UserModel>("User", userSchema);
 
 export default User;
