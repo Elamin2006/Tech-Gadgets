@@ -17,7 +17,7 @@ const config = {
   MONGO_URL: process.env.MONGO_URI,
 
   //JWT
-  ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET,
+  ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET!,
 
   //Email
   EMAIL_HOST: process.env.EMAIL_HOST || "smtp.gmail.com",
