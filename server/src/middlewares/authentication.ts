@@ -1,57 +1,74 @@
 import type { RequestHandler } from "express";
 import jwt from "jsonwebtoken";
 
-import ApiError from "../utils/apiError.js";
 import User from "../models/user.model.js";
+import ApiError from "../utils/apiError.js";
+import config from "../config/env.js";
 
-const authentication: RequestHandler = async (req, res, next) => {
+const authentication: RequestHandler = async (
+  req,
+  _res,
+  next,
+) => {
   try {
-    const authHeader = req.headers.authorization;
+    let token: string | undefined;
 
-    if (!authHeader?.startsWith("Bearer ")) {
-      return next(new ApiError("Unauthorized", 401));
+    if (req.cookies?.accessToken) {
+      token = req.cookies.accessToken;
     }
 
-    const token = authHeader.split(" ")[1];
+    if (
+      !token &&
+      req.headers.authorization?.startsWith("Bearer ")
+    ) {
+      token = req.headers.authorization.split(" ")[1];
+    }
 
     if (!token) {
-      return next(new ApiError("Unauthorized", 401));
+      throw new ApiError(
+        "Unauthorized, no token provided",
+        401,
+      );
     }
 
     const decoded = jwt.verify(
       token,
-      process.env.ACCESS_TOKEN_SECRET as string,
-    ) as jwt.JwtPayload;
+      config.ACCESS_TOKEN_SECRET,
+    ) 
 
-    const userId = decoded.userId;
+    if (typeof decoded === "string" || !decoded.userId) {
+  throw new ApiError("Invalid token", 401);
+}
 
-    if (!userId) {
-      return next(new ApiError("Invalid token", 401));
+    if (!decoded.userId) {
+      throw new ApiError("Invalid token", 401);
     }
 
-    const currentUser = await User.findById(userId);
+    const currentUser = await User.findById(decoded.userId);
 
     if (!currentUser) {
-      return next(
-        new ApiError(
-          "The user belonging to this token no longer exists.",
-          401,
-        ),
+      throw new ApiError(
+        "The user belonging to this token no longer exists.",
+        401,
       );
     }
 
-if (!currentUser.role) {
-  return next(new ApiError("User role is missing", 401));
-}
+    if (!currentUser.role) {
+      throw new ApiError("User role is missing", 401);
+    }
 
-req.user = {
-  id: currentUser._id.toString(),
-  role: currentUser.role,
-};
+    req.user = {
+      id: currentUser._id.toString(),
+      role: currentUser.role,
+    };
 
     next();
-  } catch {
-    next(
+  } catch (error) {
+    if (error instanceof ApiError) {
+      return next(error);
+    }
+
+    return next(
       new ApiError(
         "Invalid token or token has expired. Please login again.",
         401,
