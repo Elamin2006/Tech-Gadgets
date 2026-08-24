@@ -1,44 +1,66 @@
 import { z } from "zod";
 
-export const registerValidation = z.object({
-  firstName: z
-    .string()
-    .min(3)
-    .max(15)
-    .toLowerCase(),
+const objectIdSchema = z
+  .string()
+  .regex(/^[0-9a-fA-F]{24}$/, "Invalid user id");
 
-  lastName: z
-    .string()
-    .min(3)
-    .max(15)
-    .toLowerCase(),
+const emailSchema = z
+  .email("Email must be a valid email")
+  .trim()
+  .toLowerCase();
 
-  email: z
-    .email()
-    .min(3)
-    .toLowerCase(),
+const passwordSchema = z
+  .string()
+  .trim()
+  .regex(
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.#_-])[A-Za-z\d@$!%*?&.#_-]{8,}$/,
+    "Password must be at least 8 characters and contain uppercase, lowercase, number and special character",
+  );
 
-  password: z
-    .string()
-    .min(6)
-    .max(30)
-    .trim(),
+const phoneSchema = z
+  .string()
+  .trim()
+  .regex(
+    /^\+?[1-9]\d{7,14}$/,
+    "Phone must be a valid international number",
+  );
 
-  role: z
-    .string()
-    .trim()
-    .optional(),
-});
+export const addUserSchema = z
+  .object({
+    username: z
+      .string()
+      .trim()
+      .min(3, "Username must be at least 3 characters")
+      .max(30, "Username must not exceed 30 characters"),
 
-export const loginValidation = z.object({
-  email: z
-    .email()
-    .min(3)
-    .toLowerCase(),
+    email: emailSchema,
 
-  password: z
-    .string()
-    .min(6)
-    .max(30)
-    .trim(),
-});
+    password: passwordSchema,
+
+    phone: phoneSchema,
+  })
+  .strict();
+
+export const userIdSchema = z
+  .object({
+    id: objectIdSchema,
+  })
+  .strict();
+
+export const updateUserSchema = z
+  .object({
+    username: z
+      .string()
+      .trim()
+      .min(3, "Username must be at least 3 characters long")
+      .max(30, "Username cannot exceed 30 characters")
+      .optional(),
+
+    phone: phoneSchema.optional(),
+
+    avatar: z
+      .url("Avatar must be a valid URL")
+      .trim()
+      .optional(),
+  })
+  .strict();
