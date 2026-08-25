@@ -1,10 +1,17 @@
 import mongoose, { type Model } from "mongoose";
 
+export interface IOTPUserData {
+  username: string;
+  email: string;
+  password: string;
+  phone?: string;
+}
+
 export interface IOTP {
   email: string;
   otp: string;
   expiresAt: Date;
-  userData?: Record<string, unknown> | null;
+  userData?: IOTPUserData | null;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -49,6 +56,6 @@ otpSchema.index(
   },
 );
 
-const OTP = mongoose.model<IOTP, OTPModel>("OTP", otpSchema);
+const OTP = mongoose.model<IOTP>("OTP", otpSchema);
 
 export default OTP;

@@ -22,6 +22,10 @@ export interface IUser {
   addresses?: IAddress[];
   wishlist?: mongoose.Types.ObjectId[];
   isVerified?: boolean;
+  isBanned?: boolean;
+  passwordResetCode?: string;
+  passwordResetExpires?: Date;
+  passwordResetVerified?: boolean;
   resetPasswordToken?: string;
   resetPasswordExpire?: Date;
   createdAt?: Date;
@@ -117,6 +121,24 @@ const userSchema = new mongoose.Schema<IUser, UserModel, IUserMethods>(
       default: false,
     },
 
+    isBanned: {
+      type: Boolean,
+      default: false,
+    },
+
+    passwordResetCode: {
+      type: String,
+    },
+
+    passwordResetExpires: {
+      type: Date,
+    },
+
+    passwordResetVerified: {
+      type: Boolean,
+      default: false,
+    },
+
     resetPasswordToken: {
       type: String,
     },
@@ -132,6 +154,10 @@ const userSchema = new mongoose.Schema<IUser, UserModel, IUserMethods>(
 
 userSchema.pre("save", async function () {
   if (!this.isModified("password")) {
+    return;
+  }
+
+   if (this.$locals.passwordAlreadyHashed) {
     return;
   }
 

@@ -5,6 +5,7 @@ import cors from "cors";
 import { logger } from "./utils/logger.js";
 import corsOptions from "./config/corsOptions.js";
 
+import authRouter from "./routes/auth.routes.js";
 import userRouter from "./routes/user.routes.js";
 import categoryRouter from "./routes/category.routes.js";
 import productRouter from "./routes/product.routes.js";
@@ -29,6 +30,7 @@ app.use(logger);
 app.use(cors(corsOptions));
 
 // Routes
+app.use(`${apiVersion}/auth`, authRouter);
 app.use(`${apiVersion}/users`, userRouter);
 app.use(`${apiVersion}/categories`, categoryRouter);
 app.use(`${apiVersion}/products`, productRouter);

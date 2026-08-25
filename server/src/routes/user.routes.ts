@@ -1,14 +1,73 @@
-import express from 'express';
-import {register, login, forgotPassword, verifyResetCode, resetPassword} from '../controllers/user.controller.js'
-import validationMiddleware from '../middlewares/validation.middleware.js';
-import { registerValidation, loginValidation } from '../validators/user.validation.js';
-const userRouter = express.Router();
+import { Router } from "express";
 
-userRouter.post("/register", validationMiddleware(registerValidation), register);
-userRouter.post("/login", validationMiddleware(loginValidation), login);
-userRouter.route('/forgot-password').post(forgotPassword)
-userRouter.route('/verify-reset-code').post(verifyResetCode)
-userRouter.route('/reset-password').post(resetPassword)
+import authentication from "../middlewares/authentication.js";
+import { allowedTo } from "../middlewares/authorization.js";
+import validationMiddleware from "../middlewares/validation.middleware.js";
 
+import {
+  addUser,
+  getUserById,
+  getAllUsers,
+  updateUser,
+  deleteUser,
+} from "../controllers/user.controller.js";
+
+import {
+  addUserSchema,
+  userIdSchema,
+  updateUserSchema,
+} from "../validators/user.validation.js";
+
+const userRouter = Router();
+
+userRouter.post(
+  "/",
+  authentication,
+  allowedTo("admin"),
+  validationMiddleware(addUserSchema),
+  addUser,
+);
+
+userRouter.get(
+  "/",
+  authentication,
+  allowedTo("admin"),
+  getAllUsers,
+);
+
+userRouter.get(
+  "/:id",
+  authentication,
+  validationMiddleware(
+    userIdSchema,
+    "params",
+  ),
+  getUserById,
+);
+
+userRouter.patch(
+  "/:id",
+  authentication,
+  validationMiddleware(
+    userIdSchema,
+    "params",
+  ),
+  validationMiddleware(
+    updateUserSchema,
+    "body",
+  ),
+  updateUser,
+);
+
+userRouter.delete(
+  "/:id",
+  authentication,
+  allowedTo("admin"),
+  validationMiddleware(
+    userIdSchema,
+    "params",
+  ),
+  deleteUser,
+);
 
 export default userRouter;
