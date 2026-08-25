@@ -1,112 +1,136 @@
-import User from "../models/user.model.js";
+import type { RequestHandler } from "express";
+
+import asyncHandler from "../utils/asyncHandler.js";
+import sendResponse from "../utils/sendRes.js";
 import ApiError from "../utils/apiError.js";
 
-export const registerUser = async (data: {
-  username: string;
-  email: string;
-  password: string;
-  phone: string;
-}) => {
-  const email = data.email.toLowerCase();
+import {
+  createUser,
+  getUserById as getUserByIdService,
+  getAllUsers as getAllUsersService,
+  updateUser as updateUserService,
+  deleteUser as deleteUserService,
+} from "../services/user.service.js";
 
-  const existingUser = await User.findOne({
-    email,
+const getUserIdParam = (req: Parameters<RequestHandler>[0]): string => {
+  const { id } = req.params;
+
+  if (typeof id !== "string") {
+    throw new ApiError("Invalid user id", 400);
+  }
+
+  return id;
+};
+
+export const addUser: RequestHandler =
+  asyncHandler(async (req, res) => {
+    const user = await createUser(
+      req.body,
+    );
+
+    return sendResponse(
+      res,
+      201,
+      "User created successfully",
+      {
+        user,
+      },
+    );
   });
 
-  if (existingUser) {
-    throw new ApiError(
-      "Email already registered",
-      409,
-    );
-  }
+export const getUserById: RequestHandler =
+  asyncHandler(async (req, res) => {
+    const id = getUserIdParam(req);
 
-  const user = await User.create({
-    ...data,
-    email,
-    isVerified: true,
-    role: "customer",
+    const user =
+      await getUserByIdService(id);
+
+    return sendResponse(
+      res,
+      200,
+      "User retrieved successfully",
+      {
+        user,
+      },
+    );
   });
 
-  const {
-      password: _password,
-      ...userData
-    } = user.toObject();
+export const updateUser: RequestHandler =
+  asyncHandler(async (req, res) => {
+    const id = getUserIdParam(req);
 
+    if (!req.user) {
+      throw new ApiError(
+        "Authentication required",
+        401,
+      );
+    }
 
-  return userData;
-};
+    if (
+      req.user.id !== id &&
+      req.user.role !== "admin"
+    ) {
+      throw new ApiError(
+        "You are not allowed to update this profile",
+        403,
+      );
+    }
 
-export const getUserById = async (
-  userId: string,
-) => {
-  const user = await User.findById(userId);
+    const user =
+      await updateUserService(
+        id,
+        req.body,
+      );
 
-  if (!user) {
-    throw new ApiError(
-      "User not found",
-      404,
+    return sendResponse(
+      res,
+      200,
+      "User updated successfully",
+      {
+        user,
+      },
     );
-  }
+  });
 
-  return user;
-};
+export const getAllUsers: RequestHandler =
+  asyncHandler(async (req, res) => {
+    const users =
+      await getAllUsersService();
 
-export const getAllUsers = async () => {
-  return User.find()
-    .sort({ createdAt: -1 });
-};
-
-export const updateUser = async (
-  userId: string,
-  data: {
-    username?: string;
-    phone?: string;
-    avatar?: string;
-  },
-) => {
-  const user = await User.findById(userId);
-
-  if (!user) {
-    throw new ApiError(
-      "User not found",
-      404,
+    return sendResponse(
+      res,
+      200,
+      "Users fetched successfully",
+      {
+        count: users.length,
+        users,
+      },
     );
-  }
+  });
 
-  if (data.username !== undefined) {
-    user.username = data.username;
-  }
+export const deleteUser: RequestHandler =
+  asyncHandler(async (req, res) => {
+    const id = getUserIdParam(req);
 
-  if (data.phone !== undefined) {
-    user.phone = data.phone;
-  }
+    if (!req.user) {
+      throw new ApiError(
+        "Authentication required",
+        401,
+      );
+    }
 
-  if (data.avatar !== undefined) {
-    user.avatar = data.avatar;
-  }
+    if (req.user.id === id) {
+      throw new ApiError(
+        "Admin cannot delete their own account",
+        403,
+      );
+    }
 
-  await user.save();
+    await deleteUserService(id);
 
-  const {
-      password: _password,
-      ...userData
-    } = user.toObject();
-
-
-  return userData;
-};
-
-export const deleteUser = async (
-  userId: string,
-) => {
-  const user = await User.findById(userId);
-
-  if (!user) {
-    throw new ApiError(
-      "User not found",
-      404,
+    return sendResponse(
+      res,
+      200,
+      "User deleted successfully",
     );
-  }
-
-  await user.deleteOne();
-};
+  });

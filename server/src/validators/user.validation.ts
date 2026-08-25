@@ -64,3 +64,14 @@ export const updateUserSchema = z
       .optional(),
   })
   .strict();
+
+export const registerValidation = addUserSchema;
+
+export const loginValidation = z
+  .object({
+    email: emailSchema,
+    password: z
+      .string()
+      .min(1, "Password is required"),
+  })
+  .strict();
