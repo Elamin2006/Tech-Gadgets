@@ -24,7 +24,7 @@ export const createUser = async (data: {
     ...data,
     email,
     isVerified: true,
-    role: "user",
+    role: "customer",
   });
 
   const { password: _password, ...userData } = user.toObject();

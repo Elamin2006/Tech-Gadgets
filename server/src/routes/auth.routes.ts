@@ -28,7 +28,7 @@ const authRouter = Router();
 
 authRouter.post(
   "/register",
-  validationMiddleware(registerValidation),
+  validationMiddleware(registerValidation, "body"),
   sendRegisterOTP,
 );
 

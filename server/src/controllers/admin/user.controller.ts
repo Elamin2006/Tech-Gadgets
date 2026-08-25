@@ -98,7 +98,7 @@ export const updateUserRole: RequestHandler = asyncHandler(async (req, res, next
       }
 
       if (
-        role !== "user" &&
+        role !== "customer" &&
         role !== "admin"
       ) {
         throw new ApiError(

@@ -184,7 +184,7 @@ export const loginUser = async (
 
   const token = generateAccessToken(
     user._id.toString(),
-    user.role ?? "user",
+    user.role ?? "customer",
   );
 
   const { password: _password, ...userData } = user.toObject();
