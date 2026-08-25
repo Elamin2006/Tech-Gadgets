@@ -1,25 +1,49 @@
-import type { RequestHandler } from "express";
-import type { ZodType } from "zod";
+import type {
+  RequestHandler,
+} from "express";
+
+import type {
+  ZodType,
+} from "zod";
 
 import ApiError from "../utils/apiError.js";
 
-const validatorMiddleware = (
+type ValidationTarget =
+  | "body"
+  | "params"
+  | "query";
+
+const validationMiddleware = (
   schema: ZodType,
+  target: ValidationTarget = "body",
 ): RequestHandler => {
   return (req, _res, next) => {
-    const result = schema.safeParse(req.body);
+    const result = schema.safeParse(
+      req[target],
+    );
 
     if (!result.success) {
       const errorMessage =
-        result.error.issues[0]?.message ?? "Invalid request data";
+        result.error.issues
+          .map(
+            (issue) =>
+              issue.message,
+          )
+          .join(", ");
 
-      return next(new ApiError(errorMessage, 400));
+      return next(
+        new ApiError(
+          errorMessage ||
+            "Invalid request data",
+          400,
+        ),
+      );
     }
 
-    req.body = result.data;
+    req[target] = result.data;
 
     next();
   };
 };
 
-export default validatorMiddleware;
+export default validationMiddleware;
