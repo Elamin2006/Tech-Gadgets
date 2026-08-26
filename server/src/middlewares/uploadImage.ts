@@ -1,21 +1,17 @@
 import multer from "multer";
-import { CloudinaryStorage } from "multer-storage-cloudinary";
 
 import ApiError from "../utils/apiError.js";
-import { cloudinary } from "../services/cloudinary.js";
 
-const storage = new CloudinaryStorage({
-  cloudinary,
-  params: async () => ({
-    folder: "tech_gadgets",
-    allowed_formats: ["jpg", "jpeg", "png", "webp"],
-  }),
-});
+const storage = multer.memoryStorage();
 
 const uploadImage = multer({
   storage,
 
-  fileFilter: (req, file, cb) => {
+  limits: {
+    fileSize: 5 * 1024 * 1024,
+  },
+
+  fileFilter: (_req, file, cb) => {
     const allowedMimeTypes = [
       "image/jpeg",
       "image/png",
@@ -27,7 +23,7 @@ const uploadImage = multer({
     } else {
       cb(
         new ApiError(
-          "Only image files are allowed.",
+          "Only JPEG, PNG and WebP images are allowed.",
           400,
         ),
       );
