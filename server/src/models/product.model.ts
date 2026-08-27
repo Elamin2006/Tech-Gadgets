@@ -10,6 +10,7 @@ export interface IProductImage {
 }
 
 export interface IProductReview {
+  _id?: mongoose.Types.ObjectId;
   user: mongoose.Types.ObjectId;
   username: string;
   rating: number;
