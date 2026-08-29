@@ -27,6 +27,10 @@ export interface ICart {
   coupon: ICartCoupon | null;
   createdAt?: Date;
   updatedAt?: Date;
+  subtotal: number;
+  discountAmount: number;
+  total: number;
+  itemCount: number;
 }
 
 export interface ICartVirtuals {
