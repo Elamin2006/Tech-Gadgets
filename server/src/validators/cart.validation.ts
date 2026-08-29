@@ -13,13 +13,27 @@ export const addToCartSchema = z.object({
   quantity: z
     .number()
     .int()
-    .min(1)
+    .min(1, "Quantity must be at least 1")
     .default(1),
 });
 
-export const updateCartItemQuantitySchema = z.object({
+export const updateCartItemSchema = z.object({
+  productId: objectIdSchema,
+
   quantity: z
     .number()
     .int()
-    .min(1),
+    .min(1, "Quantity must be at least 1"),
+});
+
+export const cartProductIdSchema = z.object({
+  productId: objectIdSchema,
+});
+
+export const applyCouponSchema = z.object({
+  code: z
+    .string()
+    .trim()
+    .min(1, "Coupon code is required")
+    .max(50, "Coupon code is too long"),
 });
