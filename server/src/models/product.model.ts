@@ -1,5 +1,4 @@
 import mongoose, {
-  type HydratedDocument,
   type Model,
 } from "mongoose";
 import slugify from "slugify";
@@ -29,7 +28,7 @@ export interface IProduct {
   description: string;
 
   price: number;
-  discountPrice?: number;
+  discountPercentage: number;
 
   stock: number;
   sku?: string;
@@ -158,22 +157,11 @@ const productSchema = new mongoose.Schema<
       min: [0, "Price cannot be negative"],
     },
 
-    discountPrice: {
+    discountPercentage: {
       type: Number,
       default: 0,
-      min: [0, "Discount price cannot be negative"],
-
-      validate: {
-        validator: function (
-          this: HydratedDocument<IProduct>,
-          value: number,
-        ) {
-          return value <= this.price;
-        },
-
-        message:
-          "Discount price cannot exceed product price",
-      },
+      min: [0, "Discount percentage cannot be negative"],
+      max: [100, "Discount percentage cannot exceed 100"],
     },
 
     stock: {
@@ -259,7 +247,7 @@ const productSchema = new mongoose.Schema<
   },
 );
 
-productSchema.pre("save", function () {
+productSchema.pre("save", function (this: mongoose.HydratedDocument<IProduct>) {
   if (this.isModified("name")) {
     this.slug = slugify(this.name, {
       lower: true,

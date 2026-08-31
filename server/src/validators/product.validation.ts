@@ -74,11 +74,12 @@ export const createProductSchema = z
       })
       .min(0, "Product price cannot be negative"),
 
-    discountPrice: z.coerce
+    discountPercentage: z.coerce
       .number({
-        error: "Discount price must be a valid number",
+        error: "Discount percentage must be a valid number",
       })
-      .min(0, "Discount price cannot be negative")
+      .min(0, "Discount percentage cannot be negative")
+      .max(100, "Discount percentage cannot exceed 100")
       .optional(),
 
     stock: z.coerce
@@ -113,15 +114,7 @@ export const createProductSchema = z
 
     isActive: booleanFromFormData.optional(),
   })
-  .refine(
-    (data) =>
-      data.discountPrice === undefined ||
-      data.discountPrice <= data.price,
-    {
-      message: "Discount price cannot exceed product price",
-      path: ["discountPrice"],
-    },
-  );
+
 
 export const updateProductSchema = z
   .object({
@@ -167,11 +160,12 @@ export const updateProductSchema = z
       .min(0, "Product price cannot be negative")
       .optional(),
 
-    discountPrice: z.coerce
+    discountPercentage: z.coerce
       .number({
-        error: "Discount price must be a valid number",
+        error: "Discount percentage must be a valid number",
       })
-      .min(0, "Discount price cannot be negative")
+      .min(0, "Discount percentage cannot be negative")
+      .max(100, "Discount percentage cannot exceed 100")
       .optional(),
 
     stock: z.coerce
@@ -211,16 +205,7 @@ export const updateProductSchema = z
       .string()
       .optional(),
   })
-  .refine(
-    (data) =>
-      data.price === undefined ||
-      data.discountPrice === undefined ||
-      data.discountPrice <= data.price,
-    {
-      message: "Discount price cannot exceed product price",
-      path: ["discountPrice"],
-    },
-  );
+
 
 export const addReviewSchema = z.object({
   rating: z.coerce
