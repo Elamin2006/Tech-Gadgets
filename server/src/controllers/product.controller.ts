@@ -5,7 +5,6 @@ import asyncHandler from "../utils/asyncHandler.js";
 import ApiError from "../utils/apiError.js";
 import sendResponse from "../utils/sendRes.js";
 
-import User from "../models/user.model.js";
 import Product from "../models/product.model.js";
 import Category from "../models/category.model.js";
 
@@ -40,7 +39,7 @@ interface CreateProductBody {
   shortDescription: string;
   description: string;
   price: number;
-  discountPrice?: number;
+  discountPercentage?: number;
   stock: number;
   sku?: string;
   categoryId: string;
@@ -202,7 +201,7 @@ export const getAllProducts: RequestHandler =
         .lean(),
     ]);
 
-    return sendResponse(
+    sendResponse(
       res,
       200,
       "Products retrieved successfully",
@@ -314,7 +313,7 @@ export const searchProducts: RequestHandler =
         filter,
       );
 
-    return sendResponse(
+    sendResponse(
       res,
       200,
       "Products fetched successfully",
@@ -355,7 +354,7 @@ export const getProductById: RequestHandler =
       );
     }
 
-    return sendResponse(
+    sendResponse(
       res,
       200,
       "Product retrieved successfully",
@@ -384,7 +383,7 @@ export const getProductReviews: RequestHandler =
       );
     }
 
-    return sendResponse(
+    sendResponse(
       res,
       200,
       "Reviews retrieved successfully",
@@ -457,8 +456,8 @@ export const createProduct: RequestHandler =
             body.description,
 
           price: body.price,
-          discountPrice:
-            body.discountPrice ?? 0,
+          discountPercentage:
+            body.discountPercentage ?? 0,
 
           stock: body.stock,
 
@@ -485,7 +484,7 @@ export const createProduct: RequestHandler =
             body.isActive ?? true,
         });
 
-      return sendResponse(
+      sendResponse(
         res,
         201,
         "Product created successfully",
@@ -571,11 +570,11 @@ export const updateProduct: RequestHandler =
     }
 
     if (
-      body.discountPrice !==
+      body.discountPercentage !==
       undefined
     ) {
-      product.discountPrice =
-        body.discountPrice;
+      product.discountPercentage =
+        body.discountPercentage;
     }
 
     if (body.stock !== undefined) {
@@ -690,15 +689,6 @@ export const updateProduct: RequestHandler =
       );
     }
 
-    if (
-  (product.discountPrice ?? 0) >
-  product.price
-) {
-  throw new ApiError(
-    "Discount price cannot exceed product price",
-    400,
-  );
-}
 
     try {
       await product.save();
@@ -717,7 +707,7 @@ export const updateProduct: RequestHandler =
       throw error;
     }
 
-    return sendResponse(
+    sendResponse(
       res,
       200,
       "Product updated successfully",
@@ -755,7 +745,7 @@ export const deleteProduct: RequestHandler =
 
     await product.deleteOne();
 
-    return sendResponse(
+    sendResponse(
       res,
       200,
       "Product deleted successfully",
@@ -887,7 +877,7 @@ product.calcAverageRating();
 
 await product.save();
 
-    return sendResponse(
+    sendResponse(
       res,
       200,
       "Review deleted successfully",
