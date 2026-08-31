@@ -10,6 +10,7 @@ import userRouter from "./routes/user.routes.js";
 import categoryRouter from "./routes/category.routes.js";
 import productRouter from "./routes/product.routes.js";
 import cartRouter from "./routes/cart.routes.js";
+import couponRouter from "./routes/coupon.routes.js";
 import orderRouter from "./routes/order.routes.js";
 import adminRouter from "./routes/admin.routes.js";
 
@@ -35,6 +36,7 @@ app.use(`${apiVersion}/users`, userRouter);
 app.use(`${apiVersion}/categories`, categoryRouter);
 app.use(`${apiVersion}/products`, productRouter);
 app.use(`${apiVersion}/cart`, cartRouter);
+app.use(`${apiVersion}/coupons`, couponRouter);
 app.use(`${apiVersion}/orders`, orderRouter);
 app.use(`${apiVersion}/admin`, adminRouter);
 
