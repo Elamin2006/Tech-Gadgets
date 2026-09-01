@@ -8,8 +8,10 @@ import ApiError from "../utils/apiError.js";
 import config from "../config/env.js";
 import {
   buildResetMailOptions,
-  sendMail,
-} from "./email.js";
+  buildRoleUpdateMailOptions,
+} from "./emails.js";
+
+import sendMail from "../utils/sendMail.js";
 import type {
   IOTPUserData,
 } from "../models/otp.model.js";
@@ -335,29 +337,26 @@ export const changeUserRole = async (
   await user.save();
 
   try {
-    await sendMail({
-      to: user.email,
-      subject: "Account Notice - Role Updated",
-      html: `
-        <h2>Hello ${user.username},</h2>
+  const mailOptions =
+    buildRoleUpdateMailOptions(
+      user.email,
+      user.username,
+      oldRole ?? "customer",
+       role,
+    );
 
-        <p>
-          Your account role has been updated from
-          <b>${oldRole}</b>
-          to
-          <b>${role}</b>
-          by the administrator.
-        </p>
+  await sendMail(mailOptions);
+} catch (error: unknown) {
+  const message =
+    error instanceof Error
+      ? error.message
+      : "Unknown email error";
 
-        <p>
-          If you did not request this change,
-          please secure your account immediately.
-        </p>
-      `,
-    });
-  } catch {
-    
-  }
+  console.error(
+    "Role update email failed:",
+    message,
+  );
+}
 
   return user;
 };
