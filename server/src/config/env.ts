@@ -2,7 +2,11 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const requiredEnvVariables = ["MONGO_URI", "ACCESS_TOKEN_SECRET"];
+const requiredEnvVariables = [
+  "MONGO_URI",
+  "ACCESS_TOKEN_SECRET",
+  "STRIPE_SECRET_KEY",
+];
 
 for (const variable of requiredEnvVariables) {
   if (!process.env[variable]) {
@@ -35,6 +39,9 @@ const config = {
   CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
   CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
 
+  // Stripe
+  STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY!,
+  STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET! || "",
 } as const;
 
 export default config;
