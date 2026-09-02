@@ -12,6 +12,8 @@ import productRouter from "./routes/product.routes.js";
 import cartRouter from "./routes/cart.routes.js";
 import couponRouter from "./routes/coupon.routes.js";
 import orderRouter from "./routes/order.routes.js";
+import paymentRouter from "./routes/payment.routes.js";
+import webhookRouter from "./routes/webhook.routes.js";
 import adminRouter from "./routes/admin.routes.js";
 
 import errorHandler from "./middlewares/errorHandler.js";
@@ -26,6 +28,8 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
+// The Stripe webhook route must receive the raw request body.
+app.use( `${apiVersion}/payments/webhook`, webhookRouter, );
 app.use(express.json());
 app.use(logger);
 app.use(cors(corsOptions));
@@ -38,6 +42,7 @@ app.use(`${apiVersion}/products`, productRouter);
 app.use(`${apiVersion}/cart`, cartRouter);
 app.use(`${apiVersion}/coupons`, couponRouter);
 app.use(`${apiVersion}/orders`, orderRouter);
+app.use(`${apiVersion}/payments`,paymentRouter,);
 app.use(`${apiVersion}/admin`, adminRouter);
 
 // Handle undefined routes
