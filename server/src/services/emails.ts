@@ -412,3 +412,108 @@ export const buildRoleUpdateMailOptions = (
     `,
   };
 };
+
+export const buildPaymentSuccessMailOptions = (
+  email: string,
+  username: string,
+  orderId: string,
+  total: number,
+): MailOptions => ({
+  from: FROM_EMAIL,
+
+  to: email,
+
+  subject:
+    `Payment Successful - Order #${orderId}`,
+
+  text:
+    `Hello ${username}. ` +
+    `Your payment for order #${orderId} was successful. ` +
+    `Total paid: ${total.toFixed(2)} EGP.`,
+
+  html: `
+    <div
+      style="
+        font-family:Arial,sans-serif;
+        color:#333;
+        line-height:1.6;
+      "
+    >
+      <h2>Payment Successful</h2>
+
+      <p>
+        Hello
+        <strong>
+          ${escapeHtml(username)}
+        </strong>,
+      </p>
+
+      <p>
+        Your payment for order
+        <strong>
+          #${escapeHtml(orderId)}
+        </strong>
+        was successfully processed.
+      </p>
+
+      <p>
+        <strong>Total paid:</strong>
+        ${total.toFixed(2)} EGP
+      </p>
+
+      <p>
+        We will notify you when your
+        order status changes.
+      </p>
+    </div>
+  `,
+});
+
+export const buildPaymentFailureMailOptions = (
+  email: string,
+  username: string,
+  orderId: string,
+): MailOptions => ({
+  from: FROM_EMAIL,
+
+  to: email,
+
+  subject:
+    `Payment Failed - Order #${orderId}`,
+
+  text:
+    `Hello ${username}. ` +
+    `The payment for order #${orderId} could not be completed. ` +
+    "Please try again with a valid payment method.",
+
+  html: `
+    <div
+      style="
+        font-family:Arial,sans-serif;
+        color:#333;
+        line-height:1.6;
+      "
+    >
+      <h2>Payment Failed</h2>
+
+      <p>
+        Hello
+        <strong>
+          ${escapeHtml(username)}
+        </strong>,
+      </p>
+
+      <p>
+        The payment for order
+        <strong>
+          #${escapeHtml(orderId)}
+        </strong>
+        could not be completed.
+      </p>
+
+      <p>
+        Please try again with a valid payment method.
+      </p>
+    </div>
+  `,
+});
