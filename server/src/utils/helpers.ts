@@ -1,4 +1,5 @@
 import ApiError from "./apiError.js";
+import type { PipelineStage } from "mongoose";
 
 export type SortQuery = Record<string, 1 | -1>;
 
@@ -8,9 +9,6 @@ export interface PaginationResult {
   skip: number;
 }
 
-/**
- * Build product sorting query.
- */
 export const getSortQuery = (
   sort?: string,
 ): SortQuery => {
@@ -46,9 +44,6 @@ export const getSortQuery = (
   );
 };
 
-/**
- * Calculate pagination values.
- */
 export const getPagination = (
   page: string | number = 1,
   limit: string | number = 10,
@@ -79,9 +74,6 @@ export const getPagination = (
   };
 };
 
-/**
- * Add a case-insensitive regex filter.
- */
 export const addRegexFilter = (
   filter: Record<string, unknown>,
   field: string,
@@ -97,9 +89,6 @@ export const addRegexFilter = (
   };
 };
 
-/**
- * Add tags filter.
- */
 export const addTagsFilter = (
   filter: Record<string, unknown>,
   tags?: string,
@@ -122,9 +111,6 @@ export const addTagsFilter = (
   };
 };
 
-/**
- * Add price range filter.
- */
 export const addPriceFilter = (
   filter: Record<string, unknown>,
   minPrice?: string,
@@ -168,9 +154,6 @@ export const addPriceFilter = (
   filter.price = priceFilter;
 };
 
-/**
- * Find a cart item by product ID.
- */
 export const findCartItemIndex = (
   cart: {
     cartItems: Array<{
@@ -187,9 +170,6 @@ export const findCartItemIndex = (
   );
 };
 
-/**
- * Update product stock when cart/order quantity changes.
- */
 export const updateProductStock = (
   product: {
     stock: number;
@@ -216,37 +196,55 @@ export const updateProductStock = (
   }
 };
 
-/**
- * Orders grouped by status.
- */
-export const getOrdersByStatusPipeline = () => [
-  {
-    $group: {
-      _id: "$status",
-      count: {
-        $sum: 1,
+export const getOrdersByStatusPipeline =
+  (): PipelineStage[] => [
+    {
+      $group: {
+        _id: "$status",
+        count: {
+          $sum: 1,
+        },
       },
     },
-  },
-];
 
-/**
- * Revenue statistics pipeline.
- */
+    {
+      $sort: {
+        count: -1,
+      },
+    },
+  ];
+
+export const getOrdersByPaymentStatusPipeline =
+  ():  PipelineStage[] => [
+    {
+      $group: {
+        _id: "$paymentStatus",
+
+        count: {
+          $sum: 1,
+        },
+      },
+    },
+
+    {
+      $sort: {
+        count: -1,
+      },
+    },
+  ];
+
+
 export const getRevenueStatsPipeline = (
   startOfThisMonth: Date,
   startOfLastMonth: Date,
   endOfLastMonth: Date,
-) => [
+): PipelineStage[] => [
   {
     $match: {
       paymentStatus: "paid",
 
       status: {
-        $nin: [
-          "cancelled",
-          "returned",
-        ],
+        $ne: "canceled",
       },
     },
   },
@@ -259,6 +257,7 @@ export const getRevenueStatsPipeline = (
         $sum: "$totalOrderPrice",
       },
 
+     
       thisMonthRevenue: {
         $sum: {
           $cond: [
@@ -268,11 +267,14 @@ export const getRevenueStatsPipeline = (
                 startOfThisMonth,
               ],
             },
+
             "$totalOrderPrice",
+
             0,
           ],
         },
       },
+
 
       lastMonthRevenue: {
         $sum: {
@@ -296,6 +298,7 @@ export const getRevenueStatsPipeline = (
             },
 
             "$totalOrderPrice",
+
             0,
           ],
         },
@@ -304,19 +307,13 @@ export const getRevenueStatsPipeline = (
   },
 ];
 
-/**
- * Top-selling products.
- */
-export const getTopProductsPipeline = () => [
+
+export const getTopProductsPipeline = (): PipelineStage[] => [
   {
     $match: {
       paymentStatus: "paid",
-
       status: {
-        $nin: [
-          "cancelled",
-          "returned",
-        ],
+        $ne: "canceled",
       },
     },
   },
@@ -328,9 +325,9 @@ export const getTopProductsPipeline = () => [
   {
     $group: {
       _id: "$orderItems.productId",
-
       totalSold: {
-        $sum: "$orderItems.quantity",
+        $sum:
+          "$orderItems.quantity",
       },
 
       revenue: {
@@ -370,34 +367,32 @@ export const getTopProductsPipeline = () => [
   {
     $project: {
       _id: "$productDetails._id",
+
       name: "$productDetails.name",
+
       image: {
         $arrayElemAt: [
           "$productDetails.images",
           0,
         ],
       },
+
       totalSold: 1,
+
       revenue: 1,
     },
   },
 ];
 
-/**
- * Daily revenue for the last seven days.
- */
 export const getDailyRevenuePipeline = (
   sevenDaysAgo: Date,
-) => [
+):  PipelineStage[] => [
   {
     $match: {
       paymentStatus: "paid",
 
       status: {
-        $nin: [
-          "cancelled",
-          "returned",
-        ],
+        $ne: "canceled",
       },
 
       createdAt: {
@@ -411,12 +406,14 @@ export const getDailyRevenuePipeline = (
       _id: {
         $dateToString: {
           format: "%Y-%m-%d",
+
           date: "$createdAt",
         },
       },
 
       revenue: {
-        $sum: "$totalOrderPrice",
+        $sum:
+          "$totalOrderPrice",
       },
 
       orders: {
