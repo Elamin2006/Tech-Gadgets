@@ -65,6 +65,58 @@ export const updateUserSchema = z
   })
   .strict();
 
+export const adminUserRoleSchema = z
+  .object({
+    role: z.enum(
+      ["admin", "customer"],
+      {
+        message:
+          "Role must be either admin or customer",
+      },
+    ),
+  })
+  .strict();
+
+  export const adminUserStatusSchema = z
+  .object({
+    isBanned: z.boolean({
+      message:
+        "isBanned must be a boolean",
+    }),
+  })
+  .strict();
+
+export const adminUsersQuerySchema = z
+  .object({
+    page: z.coerce
+      .number({
+        message: "Page must be a number",
+      })
+      .int("Page must be an integer")
+      .min(1, "Page must be at least 1")
+      .default(1),
+
+    limit: z.coerce
+      .number({
+        message: "Limit must be a number",
+      })
+      .int("Limit must be an integer")
+      .min(1, "Limit must be at least 1")
+      .max(
+        100,
+        "Limit cannot exceed 100",
+      )
+      .default(10),
+
+    role: z
+      .enum(["admin", "customer"], {
+        message:
+          "Role must be either admin or customer",
+      })
+      .optional(),
+  })
+  .strict();
+
 export const registerValidation = addUserSchema;
 
 export const loginValidation = z
