@@ -1,12 +1,38 @@
 import User from "../models/user.model.js";
 import ApiError from "../utils/apiError.js";
+import type { UserRole } from "../types/auth.types.js";
 
-export const createUser = async (data: {
+export interface CreateUserData {
   username: string;
   email: string;
   password: string;
   phone: string;
-}) => {
+}
+
+export interface UpdateUserData {
+  username?: string;
+  phone?: string;
+  avatar?: string;
+}
+
+export interface GetAllUsersOptions {
+  page?: number;
+  limit?: number;
+  role?: UserRole;
+}
+
+export interface GetAllUsersResult {
+  users: unknown[];
+  pagination: {
+    page: number;
+    limit: number;
+    totalPages: number;
+    totalUsers: number;
+  };
+}
+
+export const createUser = async (data: CreateUserData
+) => {
   const email = data.email.toLowerCase();
 
   const existingUser = await User.findOne({
@@ -35,7 +61,7 @@ export const createUser = async (data: {
 export const getUserById = async (
   userId: string,
 ) => {
-  const user = await User.findById(userId);
+  const user = await User.findById(userId).select("-password");
 
   if (!user) {
     throw new ApiError(
@@ -47,18 +73,51 @@ export const getUserById = async (
   return user;
 };
 
-export const getAllUsers = async () => {
-  return User.find()
-    .sort({ createdAt: -1 });
+export const getAllUsers = async ({
+  page = 1,
+  limit = 10,
+  role,
+}: GetAllUsersOptions = {}): Promise<GetAllUsersResult> => {
+  const query = role
+    ? { role }
+    : {};
+
+  const skip =
+    (page - 1) * limit;
+
+  const [
+    users,
+    totalUsers,
+  ] = await Promise.all([
+    User.find(query)
+      .select("-password")
+      .sort({
+        createdAt: -1,
+      })
+      .skip(skip)
+      .limit(limit)
+      .lean(),
+
+    User.countDocuments(query),
+  ]);
+
+  return {
+    users,
+    pagination: {
+      page,
+      limit,
+      totalPages:
+        Math.ceil(
+          totalUsers / limit,
+        ),
+      totalUsers,
+    },
+  };
 };
 
 export const updateUser = async (
   userId: string,
-  data: {
-    username?: string;
-    phone?: string;
-    avatar?: string;
-  },
+  data:UpdateUserData
 ) => {
   const user = await User.findById(userId);
 
@@ -87,6 +146,64 @@ export const updateUser = async (
 
   return userData;
 };
+
+export const updateUserRole = async (
+  userId: string,
+  role: UserRole,
+) => {
+  
+  const user =
+    await User.findById(userId);
+
+  if (!user) {
+    throw new ApiError(
+      "User not found",
+      404,
+    );
+  }
+
+  user.role = role;
+
+  await user.save();
+
+  const {
+    password: _password,
+    ...userData
+  } = user.toObject();
+
+  return userData;
+};
+
+export const toggleUserBanStatus =
+  async (
+    userId: string,
+    isBanned: boolean,
+  ) => {
+    const user =
+      await User.findById(
+        userId,
+      );
+
+    if (!user) {
+      throw new ApiError(
+        "User not found",
+        404,
+      );
+    }
+
+    user.isBanned =
+      isBanned;
+
+    await user.save();
+
+    const {
+      password: _password,
+      ...userData
+    } = user.toObject();
+
+    return userData;
+  };
+
 
 export const deleteUser = async (
   userId: string,

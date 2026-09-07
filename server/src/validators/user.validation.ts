@@ -37,7 +37,7 @@ export const addUserSchema = z
 
     password: passwordSchema,
 
-    phone: phoneSchema,
+    phone: phoneSchema.optional(),
   })
   .strict();
 

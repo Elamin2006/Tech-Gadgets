@@ -1,176 +1,155 @@
 import type { RequestHandler } from "express";
-import asyncHandler from "express-async-handler";
 
-import User from "../../models/user.model.js";
+import asyncHandler from "../../utils/asyncHandler.js";
+import sendResponse from "../../utils/sendRes.js";
 import ApiError from "../../utils/apiError.js";
+
 import type { UserRole } from "../../types/auth.types.js";
 
-interface UpdateUserRoleBody {
-  role: UserRole;
-}
+import {
+  getAllUsers as getAllUsersService,
+  getUserById as getUserByIdService,
+  updateUserRole as updateUserRoleService,
+  toggleUserBanStatus as toggleUserBanStatusService,
+  deleteUser as deleteUserService,
+} from "../../services/user.service.js";
 
-interface ToggleUserBanBody {
-  isBanned: boolean;
-}
+const getUserIdParam = (
+  req: Parameters<RequestHandler>[0],
+): string => {
+  const { id } = req.params;
 
-export const getAllUsers: RequestHandler = asyncHandler(async (req, res, next) => {
-    
-      const page =
-        typeof req.query.page === "string"
-          ? Number(req.query.page)
-          : 1;
+  if (typeof id !== "string") {
+    throw new ApiError(
+      "Invalid user id",
+      400,
+    );
+  }
 
-      const limit =
-        typeof req.query.limit === "string"
-          ? Number(req.query.limit)
-          : 10;
+  return id;
+};
 
-      const role =
-        typeof req.query.role === "string"
-          ? req.query.role
-          : undefined;
+export const getAllUsers: RequestHandler =
+  asyncHandler(async (req, res) => {
+    const {
+      page = 1,
+      limit = 10,
+      role,
+    } = req.query as {
+      page?: number;
+      limit?: number;
+      role?: "admin" | "customer";
+    };
 
-      const query = role
-        ? { role }
-        : {};
-
-      const users = await User.find(query)
-        .select("-password")
-        .sort({ createdAt: -1 })
-        .skip((page - 1) * limit)
-        .limit(limit);
-
-      const totalUsers =
-        await User.countDocuments(query);
-
-      res.status(200).json({
-        success: true,
-        data: users,
-        pagination: {
-          page,
-          limit,
-          totalPages:
-            Math.ceil(
-              totalUsers / limit,
-            ),
-          totalUsers,
-        },
+    const result =
+      await getAllUsersService({
+        page,
+        limit,
+        role,
       });
-    
+
+    return sendResponse(
+      res,
+      200,
+      "Users fetched successfully",
+      {
+        users: result.users,
+        pagination:
+          result.pagination,
+      },
+    );
   });
 
-export const getUserById: RequestHandler = asyncHandler(async (req, res, next) => {
-   
-      const user =
-        await User.findById(
-          req.params.id,
-        ).select("-password");
+export const getUserById: RequestHandler =
+  asyncHandler(async (req, res) => {
+    const userId = getUserIdParam(req);
 
-      if (!user) {
-        throw new ApiError(
-          "User not found",
-          404,
-        );
-      }
+    const user =
+      await getUserByIdService(userId);
 
-      res.status(200).json({
-        success: true,
-        data: user,
-      });
-   
+    return sendResponse(
+      res,
+      200,
+      "User retrieved successfully",
+      {
+        user,
+      },
+    );
   });
 
-export const updateUserRole: RequestHandler = asyncHandler(async (req, res, next) => {
-    
-      const { role } =
-        req.body as UpdateUserRoleBody;
 
-      const user =
-        await User.findById(
-          req.params.id,
-        );
+export const updateUserRole: RequestHandler =
+  asyncHandler(async (req, res) => {
+    const userId =  getUserIdParam(req);
 
-      if (!user) {
-        throw new ApiError(
-          "User not found",
-          404,
-        );
-      }
+    const { role } = req.body as {
+      role: "admin" | "customer";
+    };
 
-      if (
-        role !== "customer" &&
-        role !== "admin"
-      ) {
-        throw new ApiError(
-          "Invalid role",
-          400,
-        );
-      }
+    const user =
+      await updateUserRoleService(
+        userId,
+        role,
+      );
 
-      user.role = role;
-
-      await user.save();
-
-      res.status(200).json({
-        success: true,
-        message:
-          "User role updated successfully",
-        data: user,
-      });
-    
+    return sendResponse(
+      res,
+      200,
+      "User role updated successfully",
+      {
+        user,
+      },
+    );
   });
 
-export const toggleUserBanStatus: RequestHandler = asyncHandler(async (req, res, next) => {
-    
-      const { isBanned } =
-        req.body as ToggleUserBanBody;
 
-      const user =
-        await User.findById(
-          req.params.id,
-        );
+export const toggleUserBanStatus: RequestHandler =
+  asyncHandler(async (req, res) => {
+    const userId =  getUserIdParam(req);
 
-      if (!user) {
-        throw new ApiError(
-          "User not found",
-          404,
-        );
-      }
+    const { isBanned } =
+      req.body as {
+        isBanned: boolean;
+      };
 
-      user.isBanned = Boolean(isBanned);
+    const user =
+      await toggleUserBanStatusService(
+        userId,
+        isBanned,
+      );
 
-      await user.save();
-
-      res.status(200).json({
-        success: true,
-        message: user.isBanned
-          ? "User suspended successfully"
-          : "User reactivated successfully",
-        data: user,
-      });
-   
+    return sendResponse(
+      res,
+      200,
+      isBanned
+        ? "User suspended successfully"
+        : "User reactivated successfully",
+      {
+        user,
+      },
+    );
   });
 
-export const deleteUserAccount: RequestHandler = asyncHandler(async (req, res, next) => {
-    
-      const user =
-        await User.findById(
-          req.params.id,
-        );
 
-      if (!user) {
-        throw new ApiError(
-          "User not found",
-          404,
-        );
-      }
+export const deleteUserAccount: RequestHandler =
+  asyncHandler(async (req, res) => {
+    const userId = getUserIdParam(req);
 
-      await user.deleteOne();
+    if (
+      !req.user ||
+      req.user.id === userId
+    ) {
+      throw new ApiError(
+        "Admin cannot delete their own account",
+        403,
+      );
+    }
 
-      res.status(200).json({
-        success: true,
-        message:
-          "User deleted successfully",
-      });
-    
+    await deleteUserService(userId);
+
+    return sendResponse(
+      res,
+      200,
+      "User deleted successfully",
+    );
   });
